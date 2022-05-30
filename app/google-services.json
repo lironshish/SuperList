@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "410383082119",
+    "project_id": "superlist-ad7f9",
+    "storage_bucket": "superlist-ad7f9.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:410383082119:android:d103bdbe45077074594e22",
+        "android_client_info": {
+          "package_name": "com.example.superlist"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "410383082119-nv3k61dotqffr5m5mh5c8sheeovg4vfb.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB3BH6R1hl2W3cMjH1CHuoA7Ue3_EVFWb8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "410383082119-nv3k61dotqffr5m5mh5c8sheeovg4vfb.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

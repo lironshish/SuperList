@@ -15,9 +15,9 @@ import com.example.superlist.java.Utils.MyScreenUtils;
 
 public class SplashActivity extends AppCompatActivity {
 
-   // private static final String TAG = Activity_Splash.class.getSimpleName();
+  //  private static final String TAG = SplashActivity.class.getSimpleName();
 
-    final int ANIM_DURATION = 4400;
+    final int ANIM_DURATION = 7000;
 
     private ImageView splash_IMG_logo;
 
@@ -75,7 +75,7 @@ public class SplashActivity extends AppCompatActivity {
     }
 
     private void replaceActivity() {
-        Intent intent = new Intent(this, SignUpActivity.class);
+        Intent intent = new Intent(this, LoginActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
         startActivity(intent);
         finish();

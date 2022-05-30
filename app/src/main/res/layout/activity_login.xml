@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".java.Activities.SignUpActivity">
+    tools:context=".java.Activities.LoginActivity">
 
     <ImageView
         android:id="@+id/sign_up_IMG_background"
@@ -30,21 +30,12 @@
         android:layout_centerInParent="true"
         android:fontFamily="@font/font_title" />
 
-    <EditText
-        android:id="@+id/sign_up_LBL_phone_number"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:inputType="number"
-        android:layout_below="@+id/sign_up_TXT_title"
-        android:hint="Enter Your Phone Number"
-        />
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/sign_up_BTN_Login"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/sign_up_LBL_phone_number"
+        android:layout_below="@+id/sign_up_TXT_title"
         android:layout_centerInParent="true"
         android:backgroundTint="#D1828B"
         android:fontFamily="@font/font_buttons"

@@ -10,7 +10,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.SuperList">
         <activity
-            android:name=".java.Activities.SignUpActivity"
+            android:name=".java.Activities.LoginActivity"
             android:exported="false" />
         <activity
             android:name=".java.Activities.SplashActivity"

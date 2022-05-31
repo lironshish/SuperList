@@ -87,6 +87,7 @@ public class LoginActivity extends AppCompatActivity {
                 .setAvailableProviders(providers)
                 .setLogo(R.drawable.ic_logo)
                 .build();
+        //signInIntent.addFlags(PendingIntent.FLAG_IMMUTABLE);
 
         signInLauncher.launch(signInIntent);
 

@@ -4,15 +4,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/ic_background"
     tools:context=".java.Activities.SplashActivity">
 
-    <ImageView
-        android:id="@+id/sign_up_IMG_background"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:scaleType="centerCrop"
-        android:src="@drawable/ic_background" />
 
     <ImageView
         android:id="@+id/splash_IMG_logo"

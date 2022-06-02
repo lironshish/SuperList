@@ -3,8 +3,12 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Users/liron0/AndroidStudioProjects/SuperList/app/src/main/res/drawable/ic_baseline_add.xml" value="0.1985" />
+        <entry key="..\:/Users/liron0/AndroidStudioProjects/SuperList/app/src/main/res/drawable/ic_generic_profile.xml" value="0.1985" />
         <entry key="..\:/Users/liron0/AndroidStudioProjects/SuperList/app/src/main/res/drawable/ic_launcher_background.xml" value="0.1" />
         <entry key="..\:/Users/liron0/AndroidStudioProjects/SuperList/app/src/main/res/drawable/ic_login_phone.xml" value="0.1" />
+        <entry key="..\:/Users/liron0/AndroidStudioProjects/SuperList/app/src/main/res/drawable/ic_update.xml" value="0.1985" />
+        <entry key="..\:/Users/liron0/AndroidStudioProjects/SuperList/app/src/main/res/layout/activity_login.xml" value="0.190625" />
         <entry key="..\:/Users/liron0/AndroidStudioProjects/SuperList/app/src/main/res/layout/activity_main.xml" value="0.1" />
         <entry key="..\:/Users/liron0/AndroidStudioProjects/SuperList/app/src/main/res/layout/activity_sign_up.xml" value="0.2" />
         <entry key="..\:/Users/liron0/AndroidStudioProjects/SuperList/app/src/main/res/layout/activity_splash.xml" value="0.152" />

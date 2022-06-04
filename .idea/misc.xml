@@ -6,7 +6,10 @@
         <entry key="..\:/Users/liron0/AndroidStudioProjects/SuperList/app/src/main/res/drawable/ic_back.xml" value="0.1095" />
         <entry key="..\:/Users/liron0/AndroidStudioProjects/SuperList/app/src/main/res/drawable/ic_baseline_add.xml" value="0.1985" />
         <entry key="..\:/Users/liron0/AndroidStudioProjects/SuperList/app/src/main/res/drawable/ic_baseline_chat.xml" value="0.1095" />
+        <entry key="..\:/Users/liron0/AndroidStudioProjects/SuperList/app/src/main/res/drawable/ic_chat.xml" value="0.2005" />
         <entry key="..\:/Users/liron0/AndroidStudioProjects/SuperList/app/src/main/res/drawable/ic_close.xml" value="0.1" />
+        <entry key="..\:/Users/liron0/AndroidStudioProjects/SuperList/app/src/main/res/drawable/ic_edit.xml" value="0.1" />
+        <entry key="..\:/Users/liron0/AndroidStudioProjects/SuperList/app/src/main/res/drawable/ic_exit.xml" value="0.1815" />
         <entry key="..\:/Users/liron0/AndroidStudioProjects/SuperList/app/src/main/res/drawable/ic_generic_profile.xml" value="0.1985" />
         <entry key="..\:/Users/liron0/AndroidStudioProjects/SuperList/app/src/main/res/drawable/ic_launcher_background.xml" value="0.1" />
         <entry key="..\:/Users/liron0/AndroidStudioProjects/SuperList/app/src/main/res/drawable/ic_login_phone.xml" value="0.1" />
@@ -17,7 +20,10 @@
         <entry key="..\:/Users/liron0/AndroidStudioProjects/SuperList/app/src/main/res/layout/activity_main.xml" value="0.136" />
         <entry key="..\:/Users/liron0/AndroidStudioProjects/SuperList/app/src/main/res/layout/activity_sign_up.xml" value="0.136" />
         <entry key="..\:/Users/liron0/AndroidStudioProjects/SuperList/app/src/main/res/layout/activity_splash.xml" value="0.152" />
+        <entry key="..\:/Users/liron0/AndroidStudioProjects/SuperList/app/src/main/res/layout/lis_card.xml" value="0.2" />
+        <entry key="..\:/Users/liron0/AndroidStudioProjects/SuperList/app/src/main/res/layout/nav_header.xml" value="0.17291666666666666" />
         <entry key="..\:/Users/liron0/AndroidStudioProjects/SuperList/app/src/main/res/menu/bottom_app_bar_menu.xml" value="0.17239583333333333" />
+        <entry key="..\:/Users/liron0/AndroidStudioProjects/SuperList/app/src/main/res/menu/drawer_menu.xml" value="0.17239583333333333" />
         <entry key="..\:/Users/liron0/AndroidStudioProjects/SuperList/app/src/main/res/menu/top_app_bar_menu.xml" value="0.17239583333333333" />
         <entry key="..\:/Users/liron0/AndroidStudioProjects/SuperList/app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml" value="0.1" />
       </map>

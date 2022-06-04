@@ -27,7 +27,6 @@ import java.util.Arrays;
 import java.util.List;
 
 public class LoginActivity extends AppCompatActivity {
-    private ImageView login_IMG_background;
     private ImageView login_IMG_logo;
     private MaterialButton login_BTN_login;
 
@@ -125,7 +124,6 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     public void findViews(){
-        login_IMG_background = findViewById(R.id.login_IMG_background);
         login_IMG_logo = findViewById(R.id.login_IMG_logo);
         login_BTN_login = findViewById(R.id.login_BTN_login);
     }
@@ -135,6 +133,7 @@ public class LoginActivity extends AppCompatActivity {
         login_BTN_login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                startActivity(new Intent(LoginActivity.this, SignUpActivity.class));
                 login();
         //        startActivity(new Intent(LoginActivity.this, SignUpActivity.class));
 

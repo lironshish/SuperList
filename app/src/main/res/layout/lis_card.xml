@@ -34,7 +34,7 @@
                 android:padding="5dp">
 
                 <com.google.android.material.textview.MaterialTextView
-                    android:id="@+id/liqueur_LBL_title"
+                    android:id="@+id/list_LBL_title"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="List Name"
@@ -42,7 +42,7 @@
                     android:textSize="25dp" />
 
                 <com.google.android.material.textview.MaterialTextView
-                    android:id="@+id/liqueur_LBL_description"
+                    android:id="@+id/list_LBL_amount"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="Items Number"
@@ -56,7 +56,7 @@
     </com.google.android.material.card.MaterialCardView>
 
     <androidx.appcompat.widget.AppCompatImageView
-        android:id="@+id/liqueur_IMG_image"
+        android:id="@+id/list_IMG_image"
         android:layout_width="110dp"
         android:layout_height="200dp"
         android:layout_alignBottom="@id/card"

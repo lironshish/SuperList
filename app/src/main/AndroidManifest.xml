@@ -12,6 +12,9 @@
         android:supportsRtl="false"
         android:theme="@style/Theme.SuperList">
         <activity
+            android:name=".java.Activities.CreateListActivity"
+            android:exported="false" />
+        <activity
             android:name=".java.Activities.MainActivity"
             android:exported="false" />
         <activity

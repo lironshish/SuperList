@@ -38,6 +38,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="List Name"
+                    android:fontFamily="@font/font_buttons"
                     android:textColor="#FFFDFD"
                     android:textSize="25dp" />
 
@@ -46,6 +47,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="Items Number"
+                    android:fontFamily="@font/font_buttons"
                     android:textColor="@color/white"
                     android:textSize="15dp" />
 

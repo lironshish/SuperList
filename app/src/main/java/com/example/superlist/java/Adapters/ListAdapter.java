@@ -34,7 +34,7 @@ public class ListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.lis_card, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_card, parent, false);
         ListHolder liqueurHolder = new ListHolder(view);
         return liqueurHolder;
     }

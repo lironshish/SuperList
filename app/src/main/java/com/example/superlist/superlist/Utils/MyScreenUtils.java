@@ -1,4 +1,4 @@
-package com.example.superlist.java.Utils;
+package com.example.superlist.superlist.Utils;
 import android.view.View;
 import androidx.appcompat.app.AppCompatActivity;
 

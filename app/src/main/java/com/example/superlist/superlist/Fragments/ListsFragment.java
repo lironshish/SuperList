@@ -1,4 +1,4 @@
-package com.example.superlist.java.Fragments;
+package com.example.superlist.superlist.Fragments;
 
 import android.os.Bundle;
 
@@ -11,7 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.superlist.R;
-import com.example.superlist.java.Objects.List;
+import com.example.superlist.superlist.Objects.List;
 
 import java.util.ArrayList;
 

@@ -1,4 +1,4 @@
-package com.example.superlist.java.Adapters;
+package com.example.superlist.superlist.Adapters;
 
 import android.app.Activity;
 import android.view.LayoutInflater;
@@ -7,7 +7,7 @@ import android.view.ViewGroup;
 import androidx.appcompat.widget.AppCompatImageView;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.superlist.java.Objects.List;
+import com.example.superlist.superlist.Objects.List;
 import com.google.android.material.textview.MaterialTextView;
 import com.example.superlist.R;
 

@@ -1,4 +1,4 @@
-package com.example.superlist.java.Objects;
+package com.example.superlist.superlist.Objects;
 
 public class List {
 

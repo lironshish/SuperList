@@ -1,4 +1,4 @@
-package com.example.superlist.java.Activities;
+package com.example.superlist.superlist.Activities;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -10,7 +10,7 @@ import android.view.View;
 import android.view.animation.AccelerateInterpolator;
 import android.widget.ImageView;
 import com.example.superlist.R;
-import com.example.superlist.java.Utils.MyScreenUtils;
+import com.example.superlist.superlist.Utils.MyScreenUtils;
 
 
 public class SplashActivity extends AppCompatActivity {

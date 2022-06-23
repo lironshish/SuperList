@@ -17,6 +17,7 @@
 
 
         <com.google.android.material.appbar.AppBarLayout
+            android:id="@+id/appBar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:liftOnScroll="true">
@@ -41,141 +42,19 @@
 
         </com.google.android.material.appbar.AppBarLayout>
 
-
-        <androidx.fragment.app.FragmentContainerView
-            android:id="@+id/main_FRG_container"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginBottom="0dp"
-            android:clipToPadding="false"
-            app:layout_behavior="@string/appbar_scrolling_view_behavior"
+            android:orientation="vertical"
+            android:padding="5dp">
 
-            />
-
-
-        <RelativeLayout
-            android:id="@+id/panel_VIEW_message"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="bottom"
-            android:layout_marginBottom="15dp"
-            android:background="#ECE0C9"
-            android:clickable="true"
-            android:paddingBottom="100dp"
-            android:visibility="invisible">
-
-            <View
-                android:id="@+id/spacer"
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/main_RECYC_lists"
                 android:layout_width="match_parent"
-                android:layout_height="3dp"
-                android:background="#94000000" />
-
-            <LinearLayout
-                android:id="@+id/msg_LYT_top"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/spacer"
-                android:background="#88DA9F27"
-                android:fadingEdge="horizontal"
-                android:orientation="horizontal">
-
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/panel_BTN_chat_back"
-                    style="@style/Widget.MaterialComponents.Button.UnelevatedButton"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="top"
-                    android:layout_weight="1"
-                    android:backgroundTint="#00FFFFFF"
-                    app:icon="@drawable/ic_close"
-                    app:iconSize="40dp"
-                    app:iconTint="@color/white" />
-
-
-                <com.google.android.material.imageview.ShapeableImageView
-                    android:layout_width="0dp"
-                    android:layout_height="45dp"
-                    android:layout_gravity="top"
-                    android:layout_marginTop="10dp"
-                    android:layout_weight="3"
-                    android:src="@drawable/ic_chat" />
-
-                <View
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/msg_LYT_top"
-                android:layout_centerHorizontal="true"
-                android:layout_marginTop="20dp"
-                android:orientation="vertical"
-                android:padding="5dp">
-
-                <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
-                    android:id="@+id/message_BTN_going_out"
-                    android:layout_width="350dp"
-                    android:layout_height="0dp"
-                    android:layout_marginTop="20dp"
-                    android:layout_weight="1"
-                    android:backgroundTint="@color/white"
-                    android:elevation="5dp"
-                    android:fontFamily="@font/font_buttons"
-                    android:insetLeft="5dp"
-                    android:insetTop="5dp"
-                    android:insetRight="5dp"
-                    android:insetBottom="5dp"
-                    android:text="Go To Shopping"
-                    android:textAlignment="center"
-                    android:textSize="40sp"
-                    android:textStyle="bold"
-                    app:elevation="5dp" />
-
-                <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
-                    android:id="@+id/message_BTN_list_update"
-                    android:layout_width="350dp"
-                    android:layout_height="0dp"
-                    android:layout_marginTop="20dp"
-                    android:layout_weight="1"
-                    android:backgroundTint="@color/white"
-                    android:elevation="5dp"
-                    android:fontFamily="@font/font_buttons"
-                    android:insetLeft="5dp"
-                    android:insetTop="5dp"
-                    android:insetRight="5dp"
-                    android:insetBottom="5dp"
-                    android:text="List Updated!"
-                    android:textAlignment="center"
-                    android:textSize="40sp"
-                    android:textStyle="bold"
-                    app:elevation="5dp" />
-
-                <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
-                    android:id="@+id/message_BTN_list_close"
-                    android:layout_width="350dp"
-                    android:layout_height="0dp"
-                    android:layout_marginTop="20dp"
-                    android:layout_weight="1"
-                    android:backgroundTint="@color/white"
-                    android:elevation="5dp"
-                    android:fontFamily="@font/font_buttons"
-                    android:insetLeft="5dp"
-                    android:insetTop="5dp"
-                    android:insetRight="5dp"
-                    android:insetBottom="5dp"
-                    android:text="I'm Done!"
-                    android:textAlignment="center"
-                    android:textSize="40sp"
-                    android:textStyle="bold"
-                    app:elevation="5dp" />
-
-
-            </LinearLayout>
-
-        </RelativeLayout>
+                android:layout_height="600dp"
+                android:paddingTop="60dp"
+                android:layout_margin="5dp" />
+        </LinearLayout>
 
 
         <com.google.android.material.bottomappbar.BottomAppBar
@@ -205,6 +84,8 @@
             app:tint="@color/white" />
 
 
+
+
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
     <com.google.android.material.navigation.NavigationView
@@ -214,6 +95,9 @@
         android:layout_gravity="start"
        app:headerLayout="@layout/nav_header"
        app:menu="@menu/drawer_menu" />
+
+
+
 
 
 </androidx.drawerlayout.widget.DrawerLayout>

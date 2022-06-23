@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:background="@drawable/ic_background"
+    android:layout_height="wrap_content"
+    android:layout_margin="8dp">
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/card"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="40dp"
+        android:elevation="7dp"
+        app:cardElevation="7dp"
+        app:cardCornerRadius="18dp"
+        >
+
+        <androidx.appcompat.widget.LinearLayoutCompat
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:background="#D5C69A">
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:layout_width="100dp"
+                android:layout_height="match_parent"
+                android:src="#F6ECD0"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="5dp">
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/list_LBL_title"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="List Name"
+                    android:fontFamily="@font/font_buttons"
+                    android:textColor="#FFFDFD"
+                    android:textSize="25dp" />
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/list_LBL_amount"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Items Number"
+                    android:fontFamily="@font/font_buttons"
+                    android:textColor="@color/white"
+                    android:textSize="15dp" />
+
+            </LinearLayout>
+
+        </androidx.appcompat.widget.LinearLayoutCompat>
+
+    </com.google.android.material.card.MaterialCardView>
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/list_IMG_image"
+        android:layout_width="110dp"
+        android:layout_height="200dp"
+        android:layout_alignBottom="@id/card"
+        android:elevation="10dp"
+        android:src="@drawable/ic_shopping_bag" />
+
+</RelativeLayout>

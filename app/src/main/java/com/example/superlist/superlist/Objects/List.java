@@ -58,4 +58,24 @@ public class List {
     public void setItems_Counter(int items_Counter) {
         this.items_Counter = items_Counter;
     }
+
+    public String getCreatorUid() {
+        return creatorUid;
+    }
+
+    public void setCreatorUid(String creatorUid) {
+        this.creatorUid = creatorUid;
+    }
+
+    @Override
+    public String toString() {
+        return "List{" +
+                "UID='" + UID + '\'' +
+                ", title='" + title + '\'' +
+                ", items_Counter=" + items_Counter +
+                ", image_cover='" + image_cover + '\'' +
+                ", creatorUid='" + creatorUid + '\'' +
+                ", itemsUid=" + itemsUid +
+                '}';
+    }
 }

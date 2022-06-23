@@ -130,53 +130,53 @@ public class DataManager {
     /**
      * Method will load the connected user's data from database. and update his current device token for Cloud messaging
      */
-    public void loadUserFromDB() {
-        // Successfully signed in
+//    public void loadUserFromDB() {
+//        // Successfully signed in
+//
+//        FirebaseUser user = firebaseAuth.getCurrentUser();
+//        FirebaseMessaging.getInstance().getToken().addOnSuccessListener(new OnSuccessListener<String>() {
+//            @Override
+//            public void onSuccess(String s) {
+//                token = s;
+//                DatabaseReference myRef = getRealTimeDB().getReference(Keys.KEY_UID_TO_TOKENS).child(user.getUid());
+//                myRef.get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+//                    @Override
+//                    public void onComplete(@NonNull Task<DataSnapshot> task) {
+//                        if(task.isSuccessful()){
+//                            myRef.setValue(token);
+//                            Log.d("pttt", "token is : " + token);
+//                        }
+//                    }
+//                });
+//            }
+//        });
+//
+//    }
 
-        FirebaseUser user = firebaseAuth.getCurrentUser();
-        FirebaseMessaging.getInstance().getToken().addOnSuccessListener(new OnSuccessListener<String>() {
-            @Override
-            public void onSuccess(String s) {
-                token = s;
-                DatabaseReference myRef = getRealTimeDB().getReference(Keys.KEY_UID_TO_TOKENS).child(user.getUid());
-                myRef.get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<DataSnapshot> task) {
-                        if(task.isSuccessful()){
-                            myRef.setValue(token);
-                            Log.d("pttt", "token is : " + token);
-                        }
-                    }
-                });
-            }
-        });
-
-    }
 
 
-
-    public  void userListsChange(User user) {
-
-        // Create new post at /user-posts/$userid/$postid and at
-        // /posts/$postid simultaneously
-
-        DatabaseReference mDatabase;
-        mDatabase = FirebaseDatabase.getInstance().getReference();
-
-        String key = mDatabase.child(Keys.KEY_USERS).push().getKey();
-
-        user = new User(user.getUid(),user.getName(),user.getPhoneNumber());
-
-        //String uid, String name, String phoneNumber
-        Map<String, Object> postValues = user.toMap();
-
-        Map<String, Object> childUpdates = new HashMap<>();
-        childUpdates.put("/users/" + key, postValues); //lists
-        childUpdates.put("/user-lists/" + user.getUid() + "/" + key, postValues); //user lists
-
-        mDatabase.updateChildren(childUpdates);
-
-    }
+//    public  void userListsChange(User user) {
+//
+//        // Create new post at /user-posts/$userid/$postid and at
+//        // /posts/$postid simultaneously
+//
+//        DatabaseReference mDatabase;
+//        mDatabase = FirebaseDatabase.getInstance().getReference();
+//
+//        String key = mDatabase.child(Keys.KEY_USERS).push().getKey();
+//
+//        user = new User(user.getUid(),user.getName(),user.getPhoneNumber());
+//
+//        //String uid, String name, String phoneNumber
+//        Map<String, Object> postValues = user.toMap();
+//
+//        Map<String, Object> childUpdates = new HashMap<>();
+//        childUpdates.put("/users/" + key, postValues); //lists
+//        childUpdates.put("/user-lists/" + user.getUid() + "/" + key, postValues); //user lists
+//
+//        mDatabase.updateChildren(childUpdates);
+//
+//    }
 
 
 

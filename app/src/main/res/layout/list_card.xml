@@ -1,68 +1,44 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:background="@drawable/ic_background"
     android:layout_height="wrap_content"
-    android:layout_margin="8dp">
+    android:layout_margin="10dp"
+    android:backgroundTint="@color/white"
+    android:elevation="10dp"
+    app:cardCornerRadius="20dp"
+    app:cardElevation="10dp">
 
-    <com.google.android.material.card.MaterialCardView
-        android:id="@+id/card"
+
+    <androidx.appcompat.widget.LinearLayoutCompat
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="40dp"
-        android:elevation="7dp"
-        app:cardElevation="7dp"
-        app:cardCornerRadius="18dp"
-        >
+        android:orientation="vertical">
 
-        <androidx.appcompat.widget.LinearLayoutCompat
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/list_IMG_image"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:background="#D5C69A">
+            android:layout_height="115dp"
+            android:scaleType="centerCrop"
+            android:src="@drawable/ic_default_list" />
 
-            <androidx.appcompat.widget.AppCompatImageView
-                android:layout_width="100dp"
-                android:layout_height="match_parent"
-                android:src="#F6ECD0"/>
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/list_LBL_title"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            android:ellipsize="end"
+            android:fontFamily="@font/font_buttons"
+            android:gravity="center"
+            android:maxLines="2"
+            android:minLines="2"
+            android:text="List name"
+            android:textColor="#000000"
+            android:textSize="30sp" />
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:padding="5dp">
+    </androidx.appcompat.widget.LinearLayoutCompat>
 
-                <com.google.android.material.textview.MaterialTextView
-                    android:id="@+id/list_LBL_title"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="List Name"
-                    android:fontFamily="@font/font_buttons"
-                    android:textColor="#FFFDFD"
-                    android:textSize="25dp" />
-
-                <com.google.android.material.textview.MaterialTextView
-                    android:id="@+id/list_LBL_amount"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Items Number"
-                    android:fontFamily="@font/font_buttons"
-                    android:textColor="@color/white"
-                    android:textSize="15dp" />
-
-            </LinearLayout>
-
-        </androidx.appcompat.widget.LinearLayoutCompat>
-
-    </com.google.android.material.card.MaterialCardView>
-
-    <androidx.appcompat.widget.AppCompatImageView
-        android:id="@+id/list_IMG_image"
-        android:layout_width="110dp"
-        android:layout_height="200dp"
-        android:layout_alignBottom="@id/card"
-        android:elevation="10dp"
-        android:src="@drawable/ic_shopping_bag" />
-
-</RelativeLayout>
+</com.google.android.material.card.MaterialCardView>

@@ -1,19 +1,23 @@
 package com.example.superlist.superlist.Adapters;
 
 import android.app.Activity;
+import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import androidx.annotation.NonNull;
 import androidx.appcompat.widget.AppCompatImageView;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.example.superlist.superlist.Objects.List;
-import com.google.android.material.textview.MaterialTextView;
-import com.example.superlist.R;
 
 import java.util.ArrayList;
+import com.example.superlist.R;
+import com.google.android.material.textview.MaterialTextView;
 
-public class ListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+public class ListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>  {
 
     public interface Listlistener {
         void clicked(List List, int position);
@@ -23,33 +27,37 @@ public class ListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private ArrayList<List> lists = new ArrayList<>();
     private Listlistener listlistener;
 
-    public ListAdapter(Activity activity, ArrayList<List> lists){
+    public ListAdapter(Activity activity, ArrayList<List> lists, Listlistener listlistener){
         this.activity = activity;
         this.lists = lists;
+        this.listlistener = listlistener;
+
     }
 
-    public void setLististener(Listlistener listlistener) {
-        this.listlistener = listlistener;
-    }
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_card, parent, false);
-        ListHolder liqueurHolder = new ListHolder(view);
-        return liqueurHolder;
+        ListHolder listHolder = new ListHolder(view);
+        return listHolder;
     }
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder viewHolder, int position) {
+
         final ListHolder holder = (ListHolder) viewHolder;
-        List List = getItem(position);
+        List list = getItem(position);
 
-        holder.list_LBL_title.setText(List.getTitle());
-        holder.list_LBL_amount.setText("" + List.getItems_Counter());
+        holder.list_LBL_title.setText(list.getTitle());
+//        if(list.getItems_Counter() == 0)
+//            holder.list_LBL_amount.setText("There are no items yet");
+//        else
+//            holder.list_LBL_amount.setText("" + list.getItems_Counter());
 
-
-        int resourceId = activity.getResources().getIdentifier(List.getImage(), "drawable", activity.getPackageName());
-        holder.list_IMG_image.setImageResource(resourceId);
+        Glide
+                .with(activity)
+                .load(list.getImage())
+                .into(holder.list_IMG_image);
     }
 
     @Override

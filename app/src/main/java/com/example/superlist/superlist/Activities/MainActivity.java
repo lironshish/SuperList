@@ -7,6 +7,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.FragmentContainerView;
 import androidx.fragment.app.FragmentManager;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
@@ -22,8 +24,9 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.example.superlist.R;
+import com.example.superlist.superlist.Adapters.ListAdapter;
 import com.example.superlist.superlist.Firebase.DataManager;
-import com.example.superlist.superlist.Fragments.ListsFragment;
+import com.example.superlist.superlist.Objects.List;
 import com.example.superlist.superlist.Objects.User;
 import com.firebase.ui.auth.AuthUI;
 import com.github.dhaval2404.imagepicker.ImagePicker;
@@ -46,6 +49,8 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
 import java.io.ByteArrayOutputStream;
+import java.util.ArrayList;
+import java.util.Map;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -55,6 +60,7 @@ public class MainActivity extends AppCompatActivity {
     private BottomAppBar panel_AppBar_bottom;
     private MaterialToolbar panel_Toolbar_Top;
     private FloatingActionButton toolbar_FAB_add;
+    private RecyclerView main_RECYC_lists;
 
     //Firebase
     private final DataManager dataManager = DataManager.getInstance();
@@ -71,9 +77,9 @@ public class MainActivity extends AppCompatActivity {
     private CircularProgressIndicator header_BAR_progress;
     public static final String KEY_PROFILE_PICTURES = "profile_pictures";
 
-    //Fragments
-    private FragmentContainerView main_FRG_container;
-    private FragmentManager fragmentManager;
+    private ArrayList<List> myLists = new ArrayList();
+    ListAdapter adapter;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -85,32 +91,29 @@ public class MainActivity extends AppCompatActivity {
         findViews();
         initButtons();
         updateUI();
+
     }
 
 
-    private void findViews(){
+    private void findViews() {
         panel_Toolbar_Top = findViewById(R.id.panel_Toolbar_Top);
         panel_AppBar_bottom = findViewById(R.id.panel_AppBar_bottom);
         nav_view = findViewById(R.id.nav_view);
         drawer_layout = findViewById(R.id.drawer_layout);
         toolbar_FAB_add = findViewById(R.id.toolbar_FAB_add);
-
+        main_RECYC_lists = findViewById(R.id.main_RECYC_lists);
         //nav
         nav_view = findViewById(R.id.nav_view);
-        header =nav_view.getHeaderView(0);
-        navigation_header_container_FAB_profile_pic =(FloatingActionButton)header.findViewById(R.id.navigation_header_container_FAB_profile_pic);
-        header_TXT_username =header.findViewById(R.id.header_TXT_username);
-        header_IMG_user =header.findViewById(R.id.header_IMG_user);
-        header_BAR_progress =header.findViewById(R.id.header_BAR_progress);
-
-        main_FRG_container = findViewById(R.id.main_FRG_container);
-
-
+        header = nav_view.getHeaderView(0);
+        navigation_header_container_FAB_profile_pic = (FloatingActionButton) header.findViewById(R.id.navigation_header_container_FAB_profile_pic);
+        header_TXT_username = header.findViewById(R.id.header_TXT_username);
+        header_IMG_user = header.findViewById(R.id.header_IMG_user);
+        header_BAR_progress = header.findViewById(R.id.header_BAR_progress);
 
     }
 
 
-    private void initButtons(){
+    private void initButtons() {
 
         nav_view.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
@@ -161,6 +164,14 @@ public class MainActivity extends AppCompatActivity {
                 editPic();
             }
         });
+
+        toolbar_FAB_add.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(MainActivity.this,CreateListActivity.class));
+
+            }
+        });
     }
 
     /**
@@ -177,12 +188,6 @@ public class MainActivity extends AppCompatActivity {
 
     private void updateUI() {
 
-        //Update Fragment
-        fragmentManager = getSupportFragmentManager();
-        fragmentManager.beginTransaction()
-                .replace(R.id.main_FRG_container, ListsFragment.class, null)
-                .commit();
-
         DatabaseReference myRef = realtimeDB.getReference("users/").child(FirebaseAuth.getInstance().getCurrentUser().getUid());
 
         myRef.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -194,6 +199,8 @@ public class MainActivity extends AppCompatActivity {
                 Glide.with(MainActivity.this)
                         .load(myUri)
                         .into(header_IMG_user);
+
+
             }
 
             @Override
@@ -202,6 +209,48 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+
+        DatabaseReference listRef = realtimeDB.getReference("users/").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child("lists");
+        listRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                for (DataSnapshot child : snapshot.getChildren()) {
+                    try {
+                        String image = child.child("image").getValue(String.class);
+                        String name = child.child("title").getValue(String.class);
+                        List tempList = new List();
+                        tempList.setTitle(name);
+                        tempList.setImage(image);
+                        myLists.add(tempList);
+
+                    } catch (Exception ex) {}
+                }
+                Log.d("pttt",myLists.toString());
+                initAdapter();
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+
+
+
+
+
+    }
+
+    private void initAdapter() {
+        adapter = new ListAdapter(this, myLists, new ListAdapter.Listlistener() {
+            @Override
+            public void clicked(List List, int position) {
+
+            }
+        });
+        main_RECYC_lists.setLayoutManager(new GridLayoutManager(this,1));
+        main_RECYC_lists.setAdapter(adapter);
     }
 
 
@@ -226,6 +275,7 @@ public class MainActivity extends AppCompatActivity {
             UploadTask uploadTask = storageRef.putBytes(bytes);
             uploadTask.addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
                 User userToStoreNav = dataManager.getCurrentUser();
+
                 @Override
                 public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
                     if (task.isSuccessful()) {

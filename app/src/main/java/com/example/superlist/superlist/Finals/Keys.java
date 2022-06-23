@@ -7,6 +7,8 @@ public class Keys {
 
     //Realtime Database keys
     public static final String KEY_UID_TO_TOKENS = "Tokens";
+    //Storage keys
+    public static final String KEY_PROFILE_PICTURES = "profile_pictures";
 
 
 }

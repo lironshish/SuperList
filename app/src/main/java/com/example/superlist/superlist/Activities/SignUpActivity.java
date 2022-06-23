@@ -12,6 +12,7 @@ import android.view.View;
 import com.example.superlist.R;
 
 
+import com.example.superlist.superlist.Finals.Keys;
 import com.example.superlist.superlist.Firebase.DataManager;
 import com.example.superlist.superlist.Objects.User;
 import com.github.dhaval2404.imagepicker.ImagePicker;
@@ -177,23 +178,26 @@ public class SignUpActivity extends AppCompatActivity {
 
 
     private void storeUserInDB(User userToStore) {
-        //Store the user UID by Phone number
-        DatabaseReference myRef = realtimeDB.getReference("users").child(userToStore.getUid());
-        myRef.get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<DataSnapshot> task) {
-                if (task.isSuccessful()) {
-                    myRef.setValue(userToStore).addOnCompleteListener(new OnCompleteListener<Void>() {
-                        @Override
-                        public void onComplete(@NonNull Task<Void> task) {
-                            startActivity(new Intent(SignUpActivity.this, MainActivity.class));
-                            finish();
-                        }
-                    });
-                }
-            }
-        });
 
+
+
+        //Store the user UID by Phone number
+        DatabaseReference myRef = realtimeDB.getReference(Keys.KEY_USERS).child(userToStore.getUid());
+        myRef.child("name").setValue(userToStore.getName());
+        myRef.child("phoneNumber").setValue(userToStore.getPhoneNumber());
+        myRef.child("profileImgUrl").setValue(userToStore.getProfileImgUrl());
+        startActivity(new Intent(SignUpActivity.this, MainActivity.class));
+        finish();
     }
+
+
+//    FirebaseDatabase database = FirebaseDatabase.getInstance();
+//    DatabaseReference myRef = database.getReference().child("Users").child(user.getPhNumber());
+//        myRef.child("email").setValue(user.getEmail());
+//        myRef.child("firstName").setValue(user.getFirstName());
+//        myRef.child("lastName").setValue(user.getLastName());
+//        myRef.child("userImg").setValue(user.getUserImg());
+//        callback.onSuccesses();
+
 
 }

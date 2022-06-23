@@ -7,6 +7,7 @@ import androidx.annotation.NonNull;
 import com.example.superlist.superlist.Finals.Keys;
 import com.example.superlist.superlist.Objects.User;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
@@ -14,9 +15,13 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.messaging.FirebaseMessaging;
 import com.google.firebase.storage.FirebaseStorage;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class DataManager {
 
@@ -147,5 +152,38 @@ public class DataManager {
         });
 
     }
+
+
+
+    public  void userListsChange(User user) {
+
+        // Create new post at /user-posts/$userid/$postid and at
+        // /posts/$postid simultaneously
+
+        DatabaseReference mDatabase;
+        mDatabase = FirebaseDatabase.getInstance().getReference();
+
+        String key = mDatabase.child(Keys.KEY_USERS).push().getKey();
+
+        user = new User(user.getUid(),user.getName(),user.getPhoneNumber());
+
+        //String uid, String name, String phoneNumber
+        Map<String, Object> postValues = user.toMap();
+
+        Map<String, Object> childUpdates = new HashMap<>();
+        childUpdates.put("/users/" + key, postValues); //lists
+        childUpdates.put("/user-lists/" + user.getUid() + "/" + key, postValues); //user lists
+
+        mDatabase.updateChildren(childUpdates);
+
+    }
+
+
+
+
+
+
+
+
 
 }

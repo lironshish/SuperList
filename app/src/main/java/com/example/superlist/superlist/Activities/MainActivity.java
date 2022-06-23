@@ -15,6 +15,7 @@ import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
@@ -35,9 +36,12 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.progressindicator.CircularProgressIndicator;
 import com.google.android.material.textview.MaterialTextView;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
@@ -179,16 +183,25 @@ public class MainActivity extends AppCompatActivity {
                 .replace(R.id.main_FRG_container, ListsFragment.class, null)
                 .commit();
 
-        //Update the UI with User's info
-        header_TXT_username.setText(dataManager.getCurrentUser().getName().toString());
+        DatabaseReference myRef = realtimeDB.getReference("users/").child(FirebaseAuth.getInstance().getCurrentUser().getUid());
 
+        myRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                header_TXT_username.setText(snapshot.child("name").getValue(String.class));
 
-        //load imag profile
-        StorageReference bring = dataManager.getStorage().getReference().child(dataManager.getCurrentUser().getUid().toString());
-        Uri myUri = Uri.parse(dataManager.getCurrentUser().getProfileImgUrl());
-        Glide.with(MainActivity.this)
-                .load(myUri)
-                .into(header_IMG_user);
+                Uri myUri = Uri.parse(snapshot.child("profileImgUrl/").getValue(String.class));
+                Glide.with(MainActivity.this)
+                        .load(myUri)
+                        .into(header_IMG_user);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+
     }
 
 

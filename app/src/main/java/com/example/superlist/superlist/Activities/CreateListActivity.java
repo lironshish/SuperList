@@ -70,7 +70,6 @@ public class CreateListActivity extends AppCompatActivity {
                 myRef.child(tempList.getTitle()).child("image").setValue(tempList.getImage());
                 myRef.child(tempList.getTitle()).child("title").setValue(tempList.getTitle());
                 myRef.child(tempList.getTitle()).child("itemsCounter").setValue(0);
-
                 startActivity(new Intent(CreateListActivity.this, MainActivity.class));
                 finish();
             }

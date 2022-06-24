@@ -5,8 +5,6 @@ import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.drawerlayout.widget.DrawerLayout;
-import androidx.fragment.app.FragmentContainerView;
-import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -50,7 +48,6 @@ import com.google.firebase.storage.UploadTask;
 
 import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
-import java.util.Map;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -79,6 +76,8 @@ public class MainActivity extends AppCompatActivity {
 
     private ArrayList<List> myLists = new ArrayList();
     ListAdapter adapter;
+
+    private String currentListName;
 
 
     @Override
@@ -243,9 +242,17 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void initAdapter() {
-        adapter = new ListAdapter(this, myLists, new ListAdapter.Listlistener() {
+        adapter = new ListAdapter(this, myLists, new ListAdapter.ListListener() {
             @Override
-            public void clicked(List List, int position) {
+            public void clicked(List list, int position) {
+                //currentListName
+                currentListName = list.getTitle();
+                Intent intent = new Intent(MainActivity.this,MyListActivity.class);
+                Bundle bundle = new Bundle();
+                bundle.putString("currentListName",currentListName);
+                intent.putExtra("Bundle",bundle);
+                Log.d("pttt",list.toString());
+                startActivity(intent);
 
             }
         });

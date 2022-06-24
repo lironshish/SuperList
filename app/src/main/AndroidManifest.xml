@@ -13,6 +13,9 @@
         android:supportsRtl="false"
         android:theme="@style/Theme.SuperList">
         <activity
+            android:name=".superlist.Activities.AddItemActivity"
+            android:exported="false" />
+        <activity
             android:name=".superlist.Activities.MyListActivity"
             android:exported="false" />
         <activity

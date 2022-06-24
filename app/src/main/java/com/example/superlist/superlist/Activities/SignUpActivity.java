@@ -179,8 +179,6 @@ public class SignUpActivity extends AppCompatActivity {
 
     private void storeUserInDB(User userToStore) {
 
-
-
         //Store the user UID by Phone number
         DatabaseReference myRef = realtimeDB.getReference(Keys.KEY_USERS).child(userToStore.getUid());
         myRef.child("name").setValue(userToStore.getName());
@@ -190,14 +188,6 @@ public class SignUpActivity extends AppCompatActivity {
         finish();
     }
 
-
-//    FirebaseDatabase database = FirebaseDatabase.getInstance();
-//    DatabaseReference myRef = database.getReference().child("Users").child(user.getPhNumber());
-//        myRef.child("email").setValue(user.getEmail());
-//        myRef.child("firstName").setValue(user.getFirstName());
-//        myRef.child("lastName").setValue(user.getLastName());
-//        myRef.child("userImg").setValue(user.getUserImg());
-//        callback.onSuccesses();
 
 
 }

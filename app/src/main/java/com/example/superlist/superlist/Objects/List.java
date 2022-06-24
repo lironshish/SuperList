@@ -10,7 +10,7 @@ public class List {
     private int items_Counter = 0;
     private String image_cover = "https://firebasestorage.googleapis.com/v0/b/superlist-ad7f9.appspot.com/o/default_pictures%2Fic_default_list.jpg?alt=media&token=515aea93-d3de-468c-89b6-4d3e418a0a4f";
     private String creatorUid = "";
-    private ArrayList<String> itemsUid;
+    private ArrayList<Item> items;
 
 
 
@@ -22,8 +22,7 @@ public class List {
         this.items_Counter = items_Counter;
         this.image_cover = "https://firebasestorage.googleapis.com/v0/b/superlist-ad7f9.appspot.com/o/default_pictures%2Fic_default_list.jpg?alt=media&token=515aea93-d3de-468c-89b6-4d3e418a0a4f";
         this.creatorUid = creatorUid;
-        this.itemsUid = new ArrayList<>();
-
+        this.items = new ArrayList<>();
 
     }
 
@@ -67,6 +66,14 @@ public class List {
         this.creatorUid = creatorUid;
     }
 
+    public ArrayList<Item> getItems() {
+        return items;
+    }
+
+    public void setItems(ArrayList<Item> items) {
+        this.items = items;
+    }
+
     @Override
     public String toString() {
         return "List{" +
@@ -75,7 +82,7 @@ public class List {
                 ", items_Counter=" + items_Counter +
                 ", image_cover='" + image_cover + '\'' +
                 ", creatorUid='" + creatorUid + '\'' +
-                ", itemsUid=" + itemsUid +
+                ", items=" + items +
                 '}';
     }
 }

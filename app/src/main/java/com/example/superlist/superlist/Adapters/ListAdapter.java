@@ -1,12 +1,10 @@
 package com.example.superlist.superlist.Adapters;
 
 import android.app.Activity;
-import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.widget.AppCompatImageView;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -19,15 +17,15 @@ import com.google.android.material.textview.MaterialTextView;
 
 public class ListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>  {
 
-    public interface Listlistener {
+    public interface ListListener {
         void clicked(List List, int position);
     }
 
     private Activity activity;
     private ArrayList<List> lists = new ArrayList<>();
-    private Listlistener listlistener;
+    private ListListener listlistener;
 
-    public ListAdapter(Activity activity, ArrayList<List> lists, Listlistener listlistener){
+    public ListAdapter(Activity activity, ArrayList<List> lists, ListListener listlistener){
         this.activity = activity;
         this.lists = lists;
         this.listlistener = listlistener;
@@ -75,14 +73,12 @@ public class ListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>  
 
         private AppCompatImageView list_IMG_image;
         private MaterialTextView list_LBL_title;
-        private MaterialTextView list_LBL_amount;
 
 
         public ListHolder(View itemView) {
             super(itemView);
             list_IMG_image = itemView.findViewById(R.id.list_IMG_image);
             list_LBL_title = itemView.findViewById(R.id.list_LBL_title);
-            list_LBL_amount = itemView.findViewById(R.id.list_LBL_amount);
 
 
             itemView.setOnClickListener(new View.OnClickListener() {

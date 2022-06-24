@@ -10,7 +10,7 @@ public class User {
     String uid;
     String name;
     String phoneNumber;
-    private String profileImgUrl = "https://firebasestorage.googleapis.com/v0/b/superme-e69d5.appspot.com/o/images%2Fimg_profile_pic.JPG?alt=media&token=5970cec0-9663-4ddd-9395-ef2791ad938d"; //default pic
+    private String profileImgUrl = "https://firebasestorage.googleapis.com/v0/b/superlist-ad7f9.appspot.com/o/default_pictures%2Fic_default_profile.jpg?alt=media&token=be90a5fd-9d60-4385-8760-3246adfd7cd7"; //default pic
     private ArrayList<String> myListsUids;
 
 
@@ -22,7 +22,7 @@ public class User {
         this.uid = uid;
         this.name = name;
         this.phoneNumber = phoneNumber;
-        this.profileImgUrl = "https://firebasestorage.googleapis.com/v0/b/superme-e69d5.appspot.com/o/images%2Fimg_profile_pic.JPG?alt=media&token=5970cec0-9663-4ddd-9395-ef2791ad938d";
+        this.profileImgUrl = "https://firebasestorage.googleapis.com/v0/b/superlist-ad7f9.appspot.com/o/default_pictures%2Fic_default_profile.jpg?alt=media&token=be90a5fd-9d60-4385-8760-3246adfd7cd7";
         this.myListsUids = new ArrayList<>();
 
     }

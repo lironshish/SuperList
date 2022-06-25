@@ -5,25 +5,32 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.widget.AppCompatImageView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.example.superlist.superlist.Finals.Keys;
+import com.example.superlist.superlist.Firebase.DataManager;
 import com.example.superlist.superlist.Objects.List;
 
 import java.util.ArrayList;
 import com.example.superlist.R;
 import com.google.android.material.textview.MaterialTextView;
+import com.google.firebase.database.FirebaseDatabase;
 
 public class ListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>  {
 
     public interface ListListener {
         void clicked(List List, int position);
+        void longClick(List List, int position);
     }
 
     private Activity activity;
     private ArrayList<List> lists = new ArrayList<>();
     private ListListener listlistener;
+    private final DataManager dataManager = DataManager.getInstance();
+    private final FirebaseDatabase realtimeDB = dataManager.getRealTimeDB();
 
     public ListAdapter(Activity activity, ArrayList<List> lists, ListListener listlistener){
         this.activity = activity;
@@ -42,7 +49,6 @@ public class ListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>  
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder viewHolder, int position) {
-
         final ListHolder holder = (ListHolder) viewHolder;
         List list = getItem(position);
 
@@ -56,6 +62,9 @@ public class ListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>  
                 .with(activity)
                 .load(list.getImage())
                 .into(holder.list_IMG_image);
+
+
+
     }
 
     @Override
@@ -89,6 +98,16 @@ public class ListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>  
                     }
                 }
             });
+
+            itemView.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View v) {
+                    listlistener.longClick(getItem(getAdapterPosition()), getAdapterPosition());
+                    return true;
+                }
+            });
+
+
         }
 
     }

@@ -51,7 +51,6 @@ public class SignUpActivity extends AppCompatActivity {
     //Storage keys
     public static final String KEY_PROFILE_PICTURES = "profile_pictures";
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

@@ -16,6 +16,7 @@ import android.widget.Toast;
 import com.example.superlist.R;
 import com.example.superlist.superlist.Adapters.ItemAdapter;
 import com.example.superlist.superlist.Adapters.ListAdapter;
+import com.example.superlist.superlist.Finals.Keys;
 import com.example.superlist.superlist.Firebase.DataManager;
 import com.example.superlist.superlist.Objects.Item;
 import com.example.superlist.superlist.Objects.List;
@@ -32,6 +33,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
@@ -124,11 +126,42 @@ public class MyListActivity extends AppCompatActivity {
             public void clicked(Item item, int position) {
 
             }
+
+            @Override
+            public void longClick(Item item, int position) {
+                delete(position, item.getName());
+
+            }
         });
         list_RECYC_items.setLayoutManager(new GridLayoutManager(this,1));
         list_RECYC_items.setAdapter(adapter);
     }
 
+
+    private void delete(int position, String name) {
+        // creating a variable for our Database
+        // Reference for Firebase.
+        DatabaseReference dbref= realtimeDB.getReference(Keys.KEY_USERS).child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child("lists").child(currentListName).child("items");
+        // we are use add listerner
+        // for event listener method
+        // which is called with query.
+        Query query=dbref.child(name);
+        query.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                // remove the value at reference
+                snapshot.getRef().removeValue();
+                myItems.remove(position);
+                adapter.notifyItemRemoved(position);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+
+        });
+    }
 
     private void findViews() {
         //nav

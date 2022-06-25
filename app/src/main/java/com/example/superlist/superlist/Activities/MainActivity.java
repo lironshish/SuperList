@@ -23,6 +23,7 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.example.superlist.R;
 import com.example.superlist.superlist.Adapters.ListAdapter;
+import com.example.superlist.superlist.Finals.Keys;
 import com.example.superlist.superlist.Firebase.DataManager;
 import com.example.superlist.superlist.Objects.List;
 import com.example.superlist.superlist.Objects.User;
@@ -42,6 +43,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
@@ -255,9 +257,40 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent);
 
             }
+
+            @Override
+            public void longClick(List list, int position) {
+                delete(position, list.getTitle());
+            }
         });
         main_RECYC_lists.setLayoutManager(new GridLayoutManager(this,1));
         main_RECYC_lists.setAdapter(adapter);
+    }
+
+
+    private void delete(int position, String name) {
+        // creating a variable for our Database
+        // Reference for Firebase.
+        DatabaseReference dbref= realtimeDB.getReference(Keys.KEY_USERS).child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child("lists");
+        // we are use add listerner
+        // for event listener method
+        // which is called with query.
+        Query query=dbref.child(name);
+        query.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                // remove the value at reference
+                snapshot.getRef().removeValue();
+                myLists.remove(position);
+                adapter.notifyItemRemoved(position);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+
+        });
     }
 
 

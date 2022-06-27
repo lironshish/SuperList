@@ -3,18 +3,19 @@ package com.example.superlist.superlist.Objects;
 public class Item {
 
     private String name;
-    private int amount = 0;
+    private float amount = 0;
     private String listUid;
-    private String type = "KILO"; //default
+    private String type = " KILO"; //default
 
     public  Item() {
 
     }
 
-    public Item(String name, int amount, String listUid) {
+    public Item(String name, float amount, String listUid, String type) {
         this.name = name;
         this.amount = amount;
         this.listUid = listUid;
+        this.type = type;
     }
 
     public String getSuffix() {
@@ -33,14 +34,15 @@ public class Item {
         this.name = name;
     }
 
-    public int getAmount() {
+    public float getAmount() {
         return amount;
     }
 
     public String getAmountStr() {
         return (amount + "");
     }
-    public void setAmount(int amount) {
+
+    public void setAmount(float amount) {
         this.amount = amount;
     }
 

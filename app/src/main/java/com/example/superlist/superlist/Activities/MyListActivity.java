@@ -2,6 +2,7 @@ package com.example.superlist.superlist.Activities;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -24,6 +25,7 @@ import com.example.superlist.superlist.Objects.User;
 import com.firebase.ui.auth.AuthUI;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.progressindicator.CircularProgressIndicator;
@@ -61,10 +63,15 @@ public class MyListActivity extends AppCompatActivity {
 
     private Bundle bundle;
     private String currentListName;
+    private String currentListSerialNumber;
+
 
     private ArrayList<Item> myItems = new ArrayList();
-    ItemAdapter adapter;
+    private ItemAdapter adapter;
 
+    private MaterialToolbar panel_Toolbar_Top;
+
+    private MenuItem add_person;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,47 +81,55 @@ public class MyListActivity extends AppCompatActivity {
         if (getIntent().getBundleExtra("Bundle") != null){
             this.bundle = getIntent().getBundleExtra("Bundle");
             currentListName = bundle.getString("currentListName");
+            currentListSerialNumber = bundle.getString("currentListSerialNumber");
         } else {
             this.bundle = new Bundle();
         }
         Log.d("pttt", "myListAc "+ currentListName);
+        Log.d("pttt", "myListAc "+ currentListSerialNumber);
+        Log.d("pttt", "items: "+ myItems.toString());
 
         findViews();
         initButtons();
-         updateUI(currentListName);
+        add_person.setVisible(true);
+
+        updateUI();
     }
 
-    private void updateUI(String str) {
-        Log.d("pttt",""+ FirebaseAuth.getInstance().getCurrentUser().getUid());
-        Log.d("pttt",str);
+    private void updateUI() {
 
-        DatabaseReference listRef = realtimeDB.getReference("users/").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child("lists").child(str).child("items");
+        panel_Toolbar_Top.setTitle(currentListName);
 
-        listRef.addValueEventListener(new ValueEventListener() {
+       // DatabaseReference userRef = realtimeDB.getReference(Keys.KEY_USERS).child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child("lists").child(currentListName).child("items");
+        DatabaseReference userRef = realtimeDB.getReference(Keys.KEY_LISTS).child(currentListSerialNumber).child("items");
+
+        userRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 myItems = new ArrayList<>();
                 for (DataSnapshot child : snapshot.getChildren()) {
                     try {
-
-                       // String image = child.child("image").getValue(String.class);
-                        String name =   child.child("name").getValue(String.class);
+                        String name = child.child("name").getValue(String.class);
+                        Float amount = child.child("amount").getValue(Float.class);
                         Item tempItem = new Item();
                         tempItem.setName(name);
-                        //tempItem.setImage(image);
+                        tempItem.setAmount(amount);
                         myItems.add(tempItem);
                     } catch (Exception ex) {}
                 }
-               // Log.d("pttt",myLists.toString());
                 initAdapter();
 
             }
+
+
+
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
 
             }
         });
+
 
 
     }
@@ -129,8 +144,8 @@ public class MyListActivity extends AppCompatActivity {
 
             @Override
             public void longClick(Item item, int position) {
-                delete(position, item.getName());
 
+                delete(position, item.getName());
             }
         });
         list_RECYC_items.setLayoutManager(new GridLayoutManager(this,1));
@@ -141,7 +156,7 @@ public class MyListActivity extends AppCompatActivity {
     private void delete(int position, String name) {
         // creating a variable for our Database
         // Reference for Firebase.
-        DatabaseReference dbref= realtimeDB.getReference(Keys.KEY_USERS).child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child("lists").child(currentListName).child("items");
+        DatabaseReference dbref= realtimeDB.getReference(Keys.KEY_USERS).child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child("lists").child(currentListSerialNumber).child("items");
         // we are use add listerner
         // for event listener method
         // which is called with query.
@@ -167,13 +182,17 @@ public class MyListActivity extends AppCompatActivity {
         //nav
         nav_view = findViewById(R.id.nav_view);
         header = nav_view.getHeaderView(0);
-        navigation_header_container_FAB_profile_pic = (FloatingActionButton) header.findViewById(R.id.navigation_header_container_FAB_profile_pic);
+
         header_TXT_username = header.findViewById(R.id.header_TXT_username);
         header_IMG_user = header.findViewById(R.id.header_IMG_user);
         header_BAR_progress = header.findViewById(R.id.header_BAR_progress);
         toolbar_FAB_add = findViewById(R.id.toolbar_FAB_add);
 
         list_RECYC_items = findViewById(R.id.list_RECYC_items);
+
+        panel_Toolbar_Top = findViewById(R.id.panel_Toolbar_Top);
+        add_person = panel_Toolbar_Top.getMenu().findItem(R.id.add_person);
+
     }
 
     private void initButtons() {
@@ -212,19 +231,19 @@ public class MyListActivity extends AppCompatActivity {
 //            }
 //        });
 
-        navigation_header_container_FAB_profile_pic.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-              //  editPic();
-            }
-        });
-
-        header_IMG_user.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-               // editPic();
-            }
-        });
+//        navigation_header_container_FAB_profile_pic.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//              //  editPic();
+//            }
+//        });
+//
+//        header_IMG_user.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//               // editPic();
+//            }
+//        });
 
         toolbar_FAB_add.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -233,12 +252,28 @@ public class MyListActivity extends AppCompatActivity {
                 Intent intent = new Intent(MyListActivity.this,AddItemActivity.class);
                 Bundle bundle = new Bundle();
                 bundle.putString("currentListName",currentListName);
+                bundle.putString("currentListSerialNumber",currentListSerialNumber);
                 intent.putExtra("Bundle",bundle);
                 startActivity(intent);
                 finish();
             }
         });
+
+
+        panel_Toolbar_Top.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                Intent intent = new Intent(MyListActivity.this,ShareListActivity.class);
+                Bundle bundle = new Bundle();
+                bundle.putString("currentListName",currentListName);
+                bundle.putString("currentListSerialNumber",currentListSerialNumber);
+                intent.putExtra("Bundle",bundle);
+                startActivity(intent);
+                return false;
+            }
+        });
     }
+
 
 
 

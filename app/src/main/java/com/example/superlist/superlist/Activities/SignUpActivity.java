@@ -8,6 +8,7 @@ import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.content.Intent;
+import android.util.Log;
 import android.view.View;
 import com.example.superlist.R;
 
@@ -133,7 +134,8 @@ public class SignUpActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
 
         //View Indicates the process of the image uploading by Disabling the button
-        panel_BTN_update.setEnabled(false);
+      //  panel_BTN_update.setEnabled(false);
+
 
         //Reference to the exact path where we want the image to be store in Storage
         StorageReference userRef = dataManager.getStorage()
@@ -166,7 +168,7 @@ public class SignUpActivity extends AppCompatActivity {
                             //Set the profile URL to the object we created
                             myDownloadUri = uri.toString();
                             //View Indicates the process of the image uploading Done by making the button Enabled
-                            panel_BTN_update.setEnabled(true);
+                          //  panel_BTN_update.setEnabled(true);
                         }
                     });
                 }
@@ -183,6 +185,10 @@ public class SignUpActivity extends AppCompatActivity {
         myRef.child("name").setValue(userToStore.getName());
         myRef.child("phoneNumber").setValue(userToStore.getPhoneNumber());
         myRef.child("profileImgUrl").setValue(userToStore.getProfileImgUrl());
+        myRef.child("uid").setValue(userToStore.getUid());
+        Log.d("pttt","user 1: "+ userToStore.toString());
+        //dataManager.addUser(userToStore);
+        //Log.d("pttt","all users: "+ dataManager.getAllUsers().toString());
         startActivity(new Intent(SignUpActivity.this, MainActivity.class));
         finish();
     }

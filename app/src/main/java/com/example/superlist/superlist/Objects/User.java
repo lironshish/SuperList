@@ -14,8 +14,6 @@ public class User {
     private ArrayList<String> myListsUids;
 
 
-
-
     public User(){ }
 
     public User(String uid, String name, String phoneNumber) {

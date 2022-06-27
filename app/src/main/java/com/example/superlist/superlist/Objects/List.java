@@ -5,26 +5,39 @@ import java.util.UUID;
 
 public class List {
 
-    private String UID;
+    private String serialNumber;
     private String title = "";
     private int items_Counter = 0;
     private String image_cover = "https://firebasestorage.googleapis.com/v0/b/superlist-ad7f9.appspot.com/o/default_pictures%2Fic_default_list.jpg?alt=media&token=515aea93-d3de-468c-89b6-4d3e418a0a4f";
     private String creatorUid = "";
     private ArrayList<Item> items;
+    private ArrayList<String>  UIDsSharedWith;
 
 
 
-    public List() { }
-
-    public List(String title,String creatorUid) {
-        this.UID =  UUID.randomUUID().toString();
-        this.title = title;
-        this.items_Counter = items_Counter;
-        this.image_cover = "https://firebasestorage.googleapis.com/v0/b/superlist-ad7f9.appspot.com/o/default_pictures%2Fic_default_list.jpg?alt=media&token=515aea93-d3de-468c-89b6-4d3e418a0a4f";
-        this.creatorUid = creatorUid;
-        this.items = new ArrayList<>();
-
+    public List() {
     }
+
+    public List(String title) {
+        this.serialNumber =  UUID.randomUUID().toString();
+        this.title = title;
+        this.items_Counter = 0;
+        this.image_cover = "https://firebasestorage.googleapis.com/v0/b/superlist-ad7f9.appspot.com/o/default_pictures%2Fic_default_list.jpg?alt=media&token=515aea93-d3de-468c-89b6-4d3e418a0a4f";
+        this.items = new ArrayList<>();
+        this.UIDsSharedWith = new ArrayList<>();
+    }
+
+    public List(String title, String serialNumber) {
+        this.title = title;
+        this.serialNumber = serialNumber;
+        this.items_Counter = 0;
+        this.image_cover = "https://firebasestorage.googleapis.com/v0/b/superlist-ad7f9.appspot.com/o/default_pictures%2Fic_default_list.jpg?alt=media&token=515aea93-d3de-468c-89b6-4d3e418a0a4f";
+        this.items = new ArrayList<>();
+        this.UIDsSharedWith = new ArrayList<>();
+    }
+
+
+
 
     public String getImage() {
         return image_cover;
@@ -34,12 +47,12 @@ public class List {
         this.image_cover = image;
     }
 
-    public String getUID() {
-        return UID;
+    public String getSerialNumber() {
+        return serialNumber;
     }
 
-    public void setUID(String UID) {
-        this.UID = UID;
+    public void setSerialNumber(String serialNumber) {
+        this.serialNumber = serialNumber;
     }
 
     public String getTitle() {
@@ -77,7 +90,7 @@ public class List {
     @Override
     public String toString() {
         return "List{" +
-                "UID='" + UID + '\'' +
+                "UID='" + serialNumber + '\'' +
                 ", title='" + title + '\'' +
                 ", items_Counter=" + items_Counter +
                 ", image_cover='" + image_cover + '\'' +

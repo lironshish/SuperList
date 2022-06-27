@@ -31,7 +31,7 @@
                 app:menu="@menu/top_app_bar_menu"
                 app:navigationIcon="@drawable/ic_back"
                 app:navigationIconTint="@color/white"
-                app:title= "The Lists"
+                app:title= "The List"
                 app:titleCentered="true"
                 android:fontFamily="@font/font_buttons"
                 style="@style/Widget.Material3.FloatingActionButton.Large.Primary"

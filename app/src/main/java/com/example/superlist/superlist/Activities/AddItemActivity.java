@@ -19,6 +19,7 @@ import com.google.android.material.button.MaterialButton;
 import com.google.android.material.button.MaterialButtonToggleGroup;
 import com.google.android.material.card.MaterialCardView;
 import com.google.android.material.imageview.ShapeableImageView;
+import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -51,6 +52,7 @@ public class AddItemActivity extends AppCompatActivity {
 
     private ArrayList<Item> myItems = new ArrayList();
     private String currentListName;
+    private String currentListSerialNumber;
     private Bundle bundle;
 
     @Override
@@ -61,6 +63,7 @@ public class AddItemActivity extends AppCompatActivity {
         if (getIntent().getBundleExtra("Bundle") != null){
             this.bundle = getIntent().getBundleExtra("Bundle");
             currentListName = bundle.getString("currentListName");
+            currentListSerialNumber = bundle.getString("currentListSerialNumber");
         } else {
             this.bundle = new Bundle();
         }
@@ -70,32 +73,24 @@ public class AddItemActivity extends AppCompatActivity {
     }
 
     private void initButtons() {
+        Item item = new Item(addItem_EDT_name.getEditText().getText().toString(),0,currentListSerialNumber,KILO); //String name, float amount, String listUid, String type
 
         addItem_BTN_add.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                DatabaseReference myRef = realtimeDB.getReference(Keys.KEY_USERS).child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child("lists");
+
+                DatabaseReference myRef = realtimeDB.getReference(Keys.KEY_LISTS).child((currentListSerialNumber)).child("items");
                 myRef.addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
-                        for (DataSnapshot child : snapshot.getChildren()) {
-
                             try {
-                                Item tempItem = new Item();
                                 //store item in db
-                                myRef.child(currentListName).child("items").child(addItem_EDT_name.getEditText().getText().toString()).child("name").setValue(addItem_EDT_name.getEditText().getText().toString());
-                                // myRef.child("items").child(tempItem.getAmountStr()).child("amount").setValue(tempItem.getAmount());
-                                // String name =   myRef.child(currentListName).child("items").child("name").getValue(String.class);
-                                //  int amount = child.child("items").child("amount").getValue(Integer.class);
-                                tempItem.setName(addItem_EDT_name.getEditText().getText().toString());
-                                //tempItem.setName(name);
-                                //tempItem.setAmount(amount);
-                                myItems.add(tempItem);
-
+                                myRef.child(addItem_EDT_name.getEditText().getText().toString()).child("name").setValue(addItem_EDT_name.getEditText().getText().toString());
+                                myRef.child(addItem_EDT_name.getEditText().getText().toString()).child("amount").setValue(Float.parseFloat(addItem_EDT_amount.getEditText().getText().toString()));
+                                item.setAmount(Float.parseFloat(addItem_EDT_amount.getEditText().getText().toString()));
+                                myItems.add(item);
                             } catch (Exception ex) {
                             }
-                        }
-                     //   Log.d("pttt",myRef.toString());
                     }
 
                     @Override
@@ -107,12 +102,9 @@ public class AddItemActivity extends AppCompatActivity {
                 Intent intent = new Intent(AddItemActivity.this, MyListActivity.class);
                 Bundle bundle = new Bundle();
                 bundle.putString("currentListName",currentListName);
+                bundle.putString("currentListSerialNumber",currentListSerialNumber);
                 intent.putExtra("Bundle",bundle);
-               // Log.d("pttt",list.toString());
                 startActivity(intent);
-
-
-             //   startActivity(new Intent(AddItemActivity.this, MyListActivity.class));
                 finish();
             }
         });
@@ -125,8 +117,9 @@ public class AddItemActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if (addItem_TGBTN_kilo.isChecked()) {
-                    addItem_EDT_amount.setSuffixText(KILO);
+                    addItem_EDT_amount.setSuffixText(" " + KILO);
                     addItem_EDT_amount.getEditText().setInputType(InputType.TYPE_NUMBER_FLAG_DECIMAL | InputType.TYPE_CLASS_NUMBER);
+                    item.setSuffix(KILO);
                 }
             }
         });
@@ -135,12 +128,13 @@ public class AddItemActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if (addItem_TGBTN_units.isChecked()) {
-                    addItem_EDT_amount.setSuffixText(UNITS);
+                    addItem_EDT_amount.setSuffixText(" " + UNITS);
                     addItem_EDT_amount.getEditText().setInputType(InputType.TYPE_CLASS_NUMBER);
+                    item.setSuffix(UNITS);
+
                 }
             }
         });
-
     }
 
     private void findViews() {

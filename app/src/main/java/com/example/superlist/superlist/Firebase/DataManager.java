@@ -5,6 +5,7 @@ import android.util.Log;
 import androidx.annotation.NonNull;
 
 import com.example.superlist.superlist.Finals.Keys;
+import com.example.superlist.superlist.Objects.List;
 import com.example.superlist.superlist.Objects.User;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -13,13 +14,16 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.messaging.FirebaseMessaging;
 import com.google.firebase.storage.FirebaseStorage;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -36,7 +40,6 @@ public class DataManager {
     private String currentCategoryUid;
     private String currentListTitle;
     private String token;
-
 
     private static DataManager single_instance = null;
 
@@ -120,70 +123,5 @@ public class DataManager {
     public String getCurrentListCreator() {
         return currentListCreator;
     }
-
-
-
-
-
-    //MyDataManager Methods
-
-    /**
-     * Method will load the connected user's data from database. and update his current device token for Cloud messaging
-     */
-//    public void loadUserFromDB() {
-//        // Successfully signed in
-//
-//        FirebaseUser user = firebaseAuth.getCurrentUser();
-//        FirebaseMessaging.getInstance().getToken().addOnSuccessListener(new OnSuccessListener<String>() {
-//            @Override
-//            public void onSuccess(String s) {
-//                token = s;
-//                DatabaseReference myRef = getRealTimeDB().getReference(Keys.KEY_UID_TO_TOKENS).child(user.getUid());
-//                myRef.get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
-//                    @Override
-//                    public void onComplete(@NonNull Task<DataSnapshot> task) {
-//                        if(task.isSuccessful()){
-//                            myRef.setValue(token);
-//                            Log.d("pttt", "token is : " + token);
-//                        }
-//                    }
-//                });
-//            }
-//        });
-//
-//    }
-
-
-
-//    public  void userListsChange(User user) {
-//
-//        // Create new post at /user-posts/$userid/$postid and at
-//        // /posts/$postid simultaneously
-//
-//        DatabaseReference mDatabase;
-//        mDatabase = FirebaseDatabase.getInstance().getReference();
-//
-//        String key = mDatabase.child(Keys.KEY_USERS).push().getKey();
-//
-//        user = new User(user.getUid(),user.getName(),user.getPhoneNumber());
-//
-//        //String uid, String name, String phoneNumber
-//        Map<String, Object> postValues = user.toMap();
-//
-//        Map<String, Object> childUpdates = new HashMap<>();
-//        childUpdates.put("/users/" + key, postValues); //lists
-//        childUpdates.put("/user-lists/" + user.getUid() + "/" + key, postValues); //user lists
-//
-//        mDatabase.updateChildren(childUpdates);
-//
-//    }
-
-
-
-
-
-
-
-
 
 }

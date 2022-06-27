@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/ic_background"
+    tools:context=".superlist.Activities.ShareListActivity">
+
+    <TextView
+        android:id="@+id/share_TXT_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginBottom="10dp"
+        android:fontFamily="@font/font_title"
+        android:text="Share List"
+        android:textColor="@color/black"
+        android:textSize="40sp"
+        android:textStyle="bold" />
+
+
+    <LinearLayout
+        android:id="@+id/share_LAY_edtxt"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/share_TXT_title"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginBottom="10dp"
+        android:orientation="horizontal">
+
+        <com.hbb20.CountryCodePicker
+            android:id="@+id/share_CCP_picker"
+            android:layout_width="0dp"
+            android:layout_height="75dp"
+            android:layout_gravity="center_vertical"
+            android:layout_weight="3"
+            android:background="#00CDCED1"
+            android:elevation="10dp"
+            app:ccpDialog_allowSearch="true"
+            app:ccp_countryPreference="IL,US,AU,GB"
+            app:ccp_defaultPhoneCode="972"
+            app:ccp_rememberLastSelection="true"
+            app:ccp_showArrow="true"
+            app:ccp_showNameCode="false"
+            app:ccp_showPhoneCode="true"
+            app:ccp_textGravity="CENTER"
+            app:ccp_textSize="20sp" />
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/share_EDT_phone"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_margin="3dp"
+            android:layout_marginStart="6dp"
+            android:layout_weight="6"
+            android:hint="Enter Phone Number"
+            android:layoutDirection="ltr"
+            android:textColorHint="@color/black"
+            app:boxBackgroundColor="#ECE8E8"
+            app:boxBackgroundMode="filled"
+            app:errorEnabled="true"
+            app:startIconDrawable="@drawable/ic_login_phone">
+
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/font_buttons"
+                android:inputType="phone"
+                android:textColor="@color/black"
+                android:textColorHint="#60676161"
+                android:textDirection="ltr"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/addContact_LAY_buttons"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/share_LAY_edtxt"
+        android:layout_centerInParent="true"
+        android:orientation="horizontal">
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/share_BTN_share"
+            style="@style/Widget.MaterialComponents.Button.UnelevatedButton"
+            android:layout_width="wrap_content"
+            android:layout_height="60dp"
+            android:layout_gravity="center_vertical"
+            android:layout_margin="3dp"
+            android:backgroundTint="#CDA99A"
+            android:elevation="8dp"
+            android:fontFamily="@font/font_buttons"
+            android:text="Share!"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            app:icon="@drawable/ic_person_add"
+            app:strokeColor="@color/cardview_shadow_start_color"
+            app:strokeWidth="2dp" />
+
+    </LinearLayout>
+
+
+    <com.airbnb.lottie.LottieAnimationView
+        android:id="@+id/share_LOT_animation"
+        android:layout_width="250dp"
+        android:layout_height="250dp"
+        android:layout_below="@id/addContact_LAY_buttons"
+        android:layout_centerInParent="true"
+        android:layout_marginTop="80dp"
+        app:lottie_autoPlay="true"
+        app:lottie_loop="true"
+        app:lottie_rawRes="@raw/share_animation"
+        app:lottie_speed="0.5" />
+
+</RelativeLayout>

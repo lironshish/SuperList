@@ -2,7 +2,6 @@ package com.example.superlist.superlist.Activities;
 
 import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -18,9 +17,7 @@ import com.firebase.ui.auth.AuthUI;
 import com.firebase.ui.auth.FirebaseAuthUIActivityResultContract;
 import com.firebase.ui.auth.IdpResponse;
 import com.firebase.ui.auth.data.model.FirebaseAuthUIAuthenticationResult;
-import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
 import com.google.android.material.button.MaterialButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -99,6 +96,7 @@ public class LoginActivity extends AppCompatActivity {
             public void onSuccess(DataSnapshot dataSnapshot) {
                 if(dataSnapshot.exists()){
                     User user = dataSnapshot.getValue(User.class);
+                    Log.d("pttt", user.toString());
                     dataManager.setCurrentUser(user); // OR dataManager.getInstance().setCurrentUser(user);
                     startActivity(new Intent(LoginActivity.this,MainActivity.class));
                 }

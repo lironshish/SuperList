@@ -15,10 +15,7 @@ import com.example.superlist.superlist.Utils.MyScreenUtils;
 
 public class SplashActivity extends AppCompatActivity {
 
-  //  private static final String TAG = SplashActivity.class.getSimpleName();
-
     final int ANIM_DURATION = 7000;
-
     private ImageView splash_IMG_logo;
 
     @Override
@@ -30,7 +27,6 @@ public class SplashActivity extends AppCompatActivity {
         findViews();
 
         splash_IMG_logo.setVisibility(View.INVISIBLE);
-
         showViewSlideDown(splash_IMG_logo);
     }
 
@@ -84,7 +80,6 @@ public class SplashActivity extends AppCompatActivity {
     private void findViews() {
         splash_IMG_logo=findViewById(R.id.splash_IMG_logo);
     }
-
 
 
 }

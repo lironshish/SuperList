@@ -16,10 +16,11 @@ import com.google.android.material.textview.MaterialTextView;
 
 import java.util.ArrayList;
 
-public class ItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>   {
+public class ItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     public interface itemListener {
         void clicked(Item item, int position);
+
         void longClick(Item item, int adapterPosition);
     }
 
@@ -27,7 +28,7 @@ public class ItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>  
     private ArrayList<Item> items = new ArrayList<>();
     private itemListener itemListener;
 
-    public ItemAdapter(Activity activity, ArrayList<Item> items, itemListener itemListener){
+    public ItemAdapter(Activity activity, ArrayList<Item> items, itemListener itemListener) {
         this.activity = activity;
         this.items = items;
         this.itemListener = itemListener;
@@ -38,7 +39,8 @@ public class ItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>  
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item, parent, false);
         ItemHolder itemHolder = new ItemHolder(view);
-        return itemHolder;    }
+        return itemHolder;
+    }
 
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder viewHolder, int position) {
@@ -46,10 +48,8 @@ public class ItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>  
         Item item = getItem(position);
 
         holder.list_LBL_title.setText(item.getName());
-//        if(list.getItems_Counter() == 0)
-//            holder.list_LBL_amount.setText("There are no items yet");
-//        else
-//            holder.list_LBL_amount.setText("" + list.getItems_Counter());
+        holder.list_LBL_amount.setText(item.getAmount() + item.getSuffix());
+
         Glide
                 .with(activity)
                 .load(R.drawable.ic_shopping_bag)

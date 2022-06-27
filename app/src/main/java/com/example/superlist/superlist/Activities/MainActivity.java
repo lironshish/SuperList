@@ -5,6 +5,9 @@ import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -66,11 +69,9 @@ public class MainActivity extends AppCompatActivity {
     private final User currentUser = dataManager.getCurrentUser();
     private final FirebaseDatabase realtimeDB = dataManager.getRealTimeDB();
 
-
     //nav
     private NavigationView nav_view;
     private View header;
-    private FloatingActionButton navigation_header_container_FAB_profile_pic;
     private MaterialTextView header_TXT_username;
     private CircleImageView header_IMG_user;
     private CircularProgressIndicator header_BAR_progress;
@@ -80,7 +81,12 @@ public class MainActivity extends AppCompatActivity {
     ListAdapter adapter;
 
     private String currentListName;
+    private String currentListSerialNumber;
 
+
+    private FragmentManager fragmentManager;
+    private FragmentTransaction fragmentTransaction;
+    private Fragment[] panel_fragments;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -95,6 +101,16 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+//    private void setFragments() {
+//        panel_fragments = new Fragment[1];
+//        panel_fragments[1] = new HomePageFragment().setActivity(this);
+////        panel_fragments[PROFILE] = new ProfileFragment().setActivity(this);
+////        panel_fragments[CLOSET] = new ClosetFragment().setActivity(this);
+////        panel_fragments[OUTFITS] = new OutfitsFragment().setActivity(this);
+////        panel_fragments[FAVORITES] = new FavoritesFragment().setActivity(this);
+//
+//    }
+
 
     private void findViews() {
         panel_Toolbar_Top = findViewById(R.id.panel_Toolbar_Top);
@@ -106,7 +122,6 @@ public class MainActivity extends AppCompatActivity {
         //nav
         nav_view = findViewById(R.id.nav_view);
         header = nav_view.getHeaderView(0);
-        navigation_header_container_FAB_profile_pic = (FloatingActionButton) header.findViewById(R.id.navigation_header_container_FAB_profile_pic);
         header_TXT_username = header.findViewById(R.id.header_TXT_username);
         header_IMG_user = header.findViewById(R.id.header_IMG_user);
         header_BAR_progress = header.findViewById(R.id.header_BAR_progress);
@@ -152,24 +167,10 @@ public class MainActivity extends AppCompatActivity {
         });
 
 
-        navigation_header_container_FAB_profile_pic.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                editPic();
-            }
-        });
-
-        header_IMG_user.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                editPic();
-            }
-        });
-
         toolbar_FAB_add.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(MainActivity.this,CreateListActivity.class));
+                startActivity(new Intent(MainActivity.this, CreateListActivity.class));
 
             }
         });
@@ -200,8 +201,6 @@ public class MainActivity extends AppCompatActivity {
                 Glide.with(MainActivity.this)
                         .load(myUri)
                         .into(header_IMG_user);
-
-
             }
 
             @Override
@@ -211,24 +210,24 @@ public class MainActivity extends AppCompatActivity {
         });
 
 
-        DatabaseReference listRef = realtimeDB.getReference("users/").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child("lists");
-        listRef.addListenerForSingleValueEvent(new ValueEventListener() {
+        DatabaseReference listsRef = realtimeDB.getReference("");
+        listsRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                for (DataSnapshot child : snapshot.getChildren()) {
-                    try {
-                        String image = child.child("image").getValue(String.class);
-                        String name = child.child("title").getValue(String.class);
-                        List tempList = new List();
-                        tempList.setTitle(name);
-                        tempList.setImage(image);
-                        myLists.add(tempList);
+                ArrayList<String> temp = new ArrayList<>();
+                for (DataSnapshot child : snapshot.child("users").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child("lists").getChildren()) {
 
-                    } catch (Exception ex) {}
+                    String listStr = child.getValue(String.class);
+                    temp.add(listStr);
+
                 }
-                Log.d("pttt",myLists.toString());
-                initAdapter();
+                for (String id : temp) {
+                    DataSnapshot st = snapshot.child("lists").child(id);
+                    List tempList = new List(st.child("title").getValue(String.class), id);
+                    myLists.add(tempList);
+                }
 
+                initAdapter();
             }
 
             @Override
@@ -236,62 +235,79 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
-
-
-
-
-
     }
 
     private void initAdapter() {
+
         adapter = new ListAdapter(this, myLists, new ListAdapter.ListListener() {
             @Override
             public void clicked(List list, int position) {
-                //currentListName
                 currentListName = list.getTitle();
-                Intent intent = new Intent(MainActivity.this,MyListActivity.class);
-                Bundle bundle = new Bundle();
-                bundle.putString("currentListName",currentListName);
-                intent.putExtra("Bundle",bundle);
-                Log.d("pttt",list.toString());
-                startActivity(intent);
+                currentListSerialNumber = list.getSerialNumber();
 
+                Intent intent = new Intent(MainActivity.this, MyListActivity.class);
+                Bundle bundle = new Bundle();
+                bundle.putString("currentListName", currentListName);
+                bundle.putString("currentListSerialNumber", currentListSerialNumber);
+                Log.d("pttt",currentListSerialNumber + " yy");
+                intent.putExtra("Bundle", bundle);
+                startActivity(intent);
             }
 
             @Override
             public void longClick(List list, int position) {
-                delete(position, list.getTitle());
+                //  delete(position, list.getTitle());
             }
         });
-        main_RECYC_lists.setLayoutManager(new GridLayoutManager(this,1));
+        main_RECYC_lists.setLayoutManager(new GridLayoutManager(this, 1));
         main_RECYC_lists.setAdapter(adapter);
     }
 
-
-    private void delete(int position, String name) {
-        // creating a variable for our Database
-        // Reference for Firebase.
-        DatabaseReference dbref= realtimeDB.getReference(Keys.KEY_USERS).child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child("lists");
-        // we are use add listerner
-        // for event listener method
-        // which is called with query.
-        Query query=dbref.child(name);
-        query.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                // remove the value at reference
-                snapshot.getRef().removeValue();
-                myLists.remove(position);
-                adapter.notifyItemRemoved(position);
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
-            }
-
-        });
-    }
+//
+//    private void delete(int position, String name) {
+//        // creating a variable for our Database
+//        // Reference for Firebase.
+//        DatabaseReference dbref= realtimeDB.getReference(Keys.KEY_USERS).child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child("lists");
+//        // we are use add listerner
+//        // for event listener method
+//        // which is called with query.
+//        Query query=dbref.child(name);
+//        query.addListenerForSingleValueEvent(new ValueEventListener() {
+//            @Override
+//            public void onDataChange(@NonNull DataSnapshot snapshot) {
+//                // remove the value at reference
+//                snapshot.getRef().removeValue();
+//                //dataManager.removeList(position);
+//                adapter.notifyItemRemoved(position);
+//            }
+//
+//            @Override
+//            public void onCancelled(@NonNull DatabaseError error) {
+//
+//            }
+//
+//        });
+//
+//        DatabaseReference lref= realtimeDB.getReference(Keys.KEY_LISTS).child(dataManager.getListUIDByName(currentListName));
+//
+//        Query query2=lref.child(currentListSerialNumber);
+//        query2.addListenerForSingleValueEvent(new ValueEventListener() {
+//            @Override
+//            public void onDataChange(@NonNull DataSnapshot snapshot) {
+//                // remove the value at reference
+//                snapshot.getRef().removeValue();
+//                //dataManager.removeList(position);
+//               // adapter.notifyItemRemoved(position);
+//            }
+//
+//            @Override
+//            public void onCancelled(@NonNull DatabaseError error) {
+//
+//            }
+//
+//        });
+//
+//    }
 
 
     @Override

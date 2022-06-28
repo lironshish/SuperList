@@ -12,6 +12,7 @@ import android.widget.TextView;
 
 import com.airbnb.lottie.LottieAnimationView;
 import com.example.superlist.R;
+import com.example.superlist.superlist.Dialogs.SharingSuccessfullyDialog;
 import com.example.superlist.superlist.Firebase.DataManager;
 import com.example.superlist.superlist.Objects.List;
 import com.google.android.material.button.MaterialButton;
@@ -128,7 +129,10 @@ public class ShareListActivity extends AppCompatActivity {
                                     sharedList.setSerialNumber(currentListSerialNumber);
                                     sharedList.setTitle(currentListName);
                                     shareList(wantedUserUID,sharedList);
+                                    SharingSuccessfullyDialog shareDialog = new SharingSuccessfullyDialog();
+                                    shareDialog.show(getSupportFragmentManager(),"share");
                             }
+
                         }
                     }
 
@@ -160,7 +164,7 @@ public class ShareListActivity extends AppCompatActivity {
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 ArrayList<String> myLists = new ArrayList<>();
                 for(DataSnapshot dataSnapshot: snapshot.getChildren()) {
-                    myLists.add(dataSnapshot.getValue(String.class)); //save pervious list
+                    myLists.add(dataSnapshot.getValue(String.class)); //save previous list
                 }
                 myLists.add(list.getSerialNumber());
                 listRef.setValue(myLists);

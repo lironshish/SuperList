@@ -1,31 +1,33 @@
 package com.example.superlist.superlist.Activities;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.example.superlist.R;
 import com.example.superlist.superlist.Adapters.ItemAdapter;
-import com.example.superlist.superlist.Adapters.ListAdapter;
 import com.example.superlist.superlist.Finals.Keys;
 import com.example.superlist.superlist.Firebase.DataManager;
 import com.example.superlist.superlist.Objects.Item;
-import com.example.superlist.superlist.Objects.List;
-import com.example.superlist.superlist.Objects.User;
 import com.firebase.ui.auth.AuthUI;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.appbar.MaterialToolbar;
+import com.google.android.material.bottomappbar.BottomAppBar;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.progressindicator.CircularProgressIndicator;
@@ -55,22 +57,20 @@ public class MyListActivity extends AppCompatActivity {
     //nav
     private NavigationView nav_view;
     private View header;
-    private FloatingActionButton navigation_header_container_FAB_profile_pic;
     private MaterialTextView header_TXT_username;
     private CircleImageView header_IMG_user;
     private CircularProgressIndicator header_BAR_progress;
-    public static final String KEY_PROFILE_PICTURES = "profile_pictures";
+    private DrawerLayout drawer_layout;
+    private BottomAppBar panel_AppBar_bottom;
 
     private Bundle bundle;
     private String currentListName;
     private String currentListSerialNumber;
 
-
     private ArrayList<Item> myItems = new ArrayList();
     private ItemAdapter adapter;
 
     private MaterialToolbar panel_Toolbar_Top;
-
     private MenuItem add_person;
 
     @Override
@@ -78,21 +78,17 @@ public class MyListActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_my_list);
 
-        if (getIntent().getBundleExtra("Bundle") != null){
+        if (getIntent().getBundleExtra("Bundle") != null) {
             this.bundle = getIntent().getBundleExtra("Bundle");
             currentListName = bundle.getString("currentListName");
             currentListSerialNumber = bundle.getString("currentListSerialNumber");
         } else {
             this.bundle = new Bundle();
         }
-        Log.d("pttt", "myListAc "+ currentListName);
-        Log.d("pttt", "myListAc "+ currentListSerialNumber);
-        Log.d("pttt", "items: "+ myItems.toString());
 
         findViews();
         initButtons();
         add_person.setVisible(true);
-
         updateUI();
     }
 
@@ -100,7 +96,26 @@ public class MyListActivity extends AppCompatActivity {
 
         panel_Toolbar_Top.setTitle(currentListName);
 
-       // DatabaseReference userRef = realtimeDB.getReference(Keys.KEY_USERS).child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child("lists").child(currentListName).child("items");
+        DatabaseReference myRef = realtimeDB.getReference(Keys.KEY_USERS).child(FirebaseAuth.getInstance().getCurrentUser().getUid());
+
+        myRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                header_TXT_username.setText(snapshot.child(Keys.KEY_USER_NAME).getValue(String.class));
+
+                Uri myUri = Uri.parse(snapshot.child(Keys.KEY_USER_PROFILE_IMAGE_URL).getValue(String.class));
+                Glide.with(MyListActivity.this)
+                        .load(myUri)
+                        .into(header_IMG_user);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+
+
         DatabaseReference userRef = realtimeDB.getReference(Keys.KEY_LISTS).child(currentListSerialNumber).child("items");
 
         userRef.addValueEventListener(new ValueEventListener() {
@@ -109,27 +124,24 @@ public class MyListActivity extends AppCompatActivity {
                 myItems = new ArrayList<>();
                 for (DataSnapshot child : snapshot.getChildren()) {
                     try {
-                        String name = child.child("name").getValue(String.class);
-                        Float amount = child.child("amount").getValue(Float.class);
+                        String name = child.child(Keys.KEY_ITEM_NAME).getValue(String.class);
+                        Float amount = child.child(Keys.KEY_ITEM_AMOUNT).getValue(Float.class);
                         Item tempItem = new Item();
                         tempItem.setName(name);
                         tempItem.setAmount(amount);
                         myItems.add(tempItem);
-                    } catch (Exception ex) {}
+                    } catch (Exception ex) {
+                    }
                 }
                 initAdapter();
 
             }
-
-
-
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
 
             }
         });
-
 
 
     }
@@ -139,28 +151,22 @@ public class MyListActivity extends AppCompatActivity {
         adapter = new ItemAdapter(this, myItems, new ItemAdapter.itemListener() {
             @Override
             public void clicked(Item item, int position) {
-
             }
 
             @Override
             public void longClick(Item item, int position) {
-
                 delete(position, item.getName());
             }
         });
-        list_RECYC_items.setLayoutManager(new GridLayoutManager(this,1));
+        list_RECYC_items.setLayoutManager(new GridLayoutManager(this, 1));
         list_RECYC_items.setAdapter(adapter);
     }
 
 
     private void delete(int position, String name) {
-        // creating a variable for our Database
-        // Reference for Firebase.
-        DatabaseReference dbref= realtimeDB.getReference(Keys.KEY_USERS).child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child("lists").child(currentListSerialNumber).child("items");
-        // we are use add listerner
-        // for event listener method
-        // which is called with query.
-        Query query=dbref.child(name);
+
+        DatabaseReference listsRef = realtimeDB.getReference(Keys.KEY_LISTS).child(currentListSerialNumber).child(Keys.KEY_ITEMS);
+        Query query = listsRef.child(name);
         query.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -191,6 +197,8 @@ public class MyListActivity extends AppCompatActivity {
         list_RECYC_items = findViewById(R.id.list_RECYC_items);
 
         panel_Toolbar_Top = findViewById(R.id.panel_Toolbar_Top);
+        panel_AppBar_bottom = findViewById(R.id.panel_AppBar_bottom);
+        drawer_layout = findViewById(R.id.drawer_layout);
         add_person = panel_Toolbar_Top.getMenu().findItem(R.id.add_person);
 
     }
@@ -222,38 +230,25 @@ public class MyListActivity extends AppCompatActivity {
             }
 
         });
-//
-//        panel_AppBar_bottom.setNavigationOnClickListener(new View.OnClickListener() {
-//            @RequiresApi(api = Build.VERSION_CODES.M)
-//            @Override
-//            public void onClick(View v) {
-//                drawer_layout.openDrawer(drawer_layout.getForegroundGravity());
-//            }
-//        });
 
-//        navigation_header_container_FAB_profile_pic.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//              //  editPic();
-//            }
-//        });
-//
-//        header_IMG_user.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//               // editPic();
-//            }
-//        });
+        panel_AppBar_bottom.setNavigationOnClickListener(new View.OnClickListener() {
+            @RequiresApi(api = Build.VERSION_CODES.M)
+            @Override
+            public void onClick(View v) {
+                drawer_layout.openDrawer(drawer_layout.getForegroundGravity());
+            }
+        });
+
 
         toolbar_FAB_add.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
-                Intent intent = new Intent(MyListActivity.this,AddItemActivity.class);
+                Intent intent = new Intent(MyListActivity.this, AddItemActivity.class);
                 Bundle bundle = new Bundle();
-                bundle.putString("currentListName",currentListName);
-                bundle.putString("currentListSerialNumber",currentListSerialNumber);
-                intent.putExtra("Bundle",bundle);
+                bundle.putString("currentListName", currentListName);
+                bundle.putString("currentListSerialNumber", currentListSerialNumber);
+                intent.putExtra("Bundle", bundle);
                 startActivity(intent);
                 finish();
             }
@@ -263,18 +258,16 @@ public class MyListActivity extends AppCompatActivity {
         panel_Toolbar_Top.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
-                Intent intent = new Intent(MyListActivity.this,ShareListActivity.class);
+                Intent intent = new Intent(MyListActivity.this, ShareListActivity.class);
                 Bundle bundle = new Bundle();
-                bundle.putString("currentListName",currentListName);
-                bundle.putString("currentListSerialNumber",currentListSerialNumber);
-                intent.putExtra("Bundle",bundle);
+                bundle.putString("currentListName", currentListName);
+                bundle.putString("currentListSerialNumber", currentListSerialNumber);
+                intent.putExtra("Bundle", bundle);
                 startActivity(intent);
                 return false;
             }
         });
     }
-
-
 
 
 }

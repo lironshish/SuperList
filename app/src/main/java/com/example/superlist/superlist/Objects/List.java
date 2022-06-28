@@ -11,9 +11,7 @@ public class List {
     private String image_cover = "https://firebasestorage.googleapis.com/v0/b/superlist-ad7f9.appspot.com/o/default_pictures%2Fic_default_list.jpg?alt=media&token=515aea93-d3de-468c-89b6-4d3e418a0a4f";
     private String creatorUid = "";
     private ArrayList<Item> items;
-    private ArrayList<String>  UIDsSharedWith;
-
-
+    private ArrayList<String> UIDsSharedWith;
 
     public List() {
     }
@@ -85,6 +83,14 @@ public class List {
 
     public void setItems(ArrayList<Item> items) {
         this.items = items;
+    }
+
+    public ArrayList<String> getUIDsSharedWith() {
+        return UIDsSharedWith;
+    }
+
+    public void setUIDsSharedWith(ArrayList<String> UIDsSharedWith) {
+        this.UIDsSharedWith = UIDsSharedWith;
     }
 
     @Override

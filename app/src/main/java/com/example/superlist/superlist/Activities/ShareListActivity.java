@@ -16,7 +16,6 @@ import com.example.superlist.superlist.Firebase.DataManager;
 import com.example.superlist.superlist.Objects.List;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.textfield.TextInputLayout;
-import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -116,11 +115,7 @@ public class ShareListActivity extends AppCompatActivity {
 
                 String phoneTemp =share_EDT_phone.getEditText().getText().toString();
                 String newPhone = phoneTemp.replace("-", "");
-
-                Log.d("pttt", newPhone);
-                Log.d("pttt", "CCP " + share_CCP_picker.getSelectedCountryCodeWithPlus());
                 wantedUserPhoneNumber = "+972" + newPhone;
-                Log.d("pttt", "phone  " + wantedUserPhoneNumber);
 
                 DatabaseReference myRef = realtimeDB.getReference("users/");
                 myRef.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -128,14 +123,11 @@ public class ShareListActivity extends AppCompatActivity {
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
                         for (DataSnapshot child : snapshot.getChildren()) {
                             Log.d("pttt","L "+ child.getChildren().toString());
-                          //  for (DataSnapshot pn : child.child("phoneNumber").getChildren()) {
                                 if(child.child("phoneNumber").getValue().toString().equals(wantedUserPhoneNumber)) {
-                          //      if(pn.getValue(String.class).equals(wantedUserPhoneNumber)) {
                                     wantedUserUID = child.child("uid").getValue(String.class);
                                     sharedList.setSerialNumber(currentListSerialNumber);
                                     sharedList.setTitle(currentListName);
                                     shareList(wantedUserUID,sharedList);
-                          //      }
                             }
                         }
                     }
@@ -145,13 +137,6 @@ public class ShareListActivity extends AppCompatActivity {
 
                     }
                 });
-
-//                wantedUserUID = dataManager.getUserUIDByPhoneNumber(wantedUserPhoneNumber);
-//                String ListSerialNumber = dataManager.getListUIDByName(currentListName);
-
-
-                //    Log.d("pttt", "LS "+ListSerialNumber);
-                //   shareList(wantedUserUID, dataManager.getListByUID(ListSerialNumber));
             }
         });
     }
@@ -169,8 +154,6 @@ public class ShareListActivity extends AppCompatActivity {
 
 
     private void shareList(String userSharedUID, List list) {
-        //add the list to the wanted user
-        //phone number, list name, list UID
            DatabaseReference listRef = realtimeDB.getReference("users/").child(userSharedUID).child("lists");
             listRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -188,10 +171,6 @@ public class ShareListActivity extends AppCompatActivity {
 
             }
         });
-//        listRef.child(list.getTitle()).child("image").setValue(list.getImage());
-//        listRef.child(list.getTitle()).child("title").setValue(list.getTitle());
-//        listRef.child(list.getTitle()).child("serial").setValue(list.getSerialNumber());
-//        listRef.child(list.getTitle()).child("itemsCounter").setValue(0);
 
         //TODO: Add window "Shared Successful"
     }

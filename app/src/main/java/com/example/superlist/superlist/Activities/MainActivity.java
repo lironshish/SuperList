@@ -5,9 +5,6 @@ import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.drawerlayout.widget.DrawerLayout;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -46,7 +43,6 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
@@ -75,23 +71,20 @@ public class MainActivity extends AppCompatActivity {
     private MaterialTextView header_TXT_username;
     private CircleImageView header_IMG_user;
     private CircularProgressIndicator header_BAR_progress;
-    public static final String KEY_PROFILE_PICTURES = "profile_pictures";
 
+    //List adapter
     private ArrayList<List> myLists = new ArrayList();
-    ListAdapter adapter;
+    private ListAdapter adapter;
 
     private String currentListName;
     private String currentListSerialNumber;
 
 
-    private FragmentManager fragmentManager;
-    private FragmentTransaction fragmentTransaction;
-    private Fragment[] panel_fragments;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
         setSupportActionBar(panel_AppBar_bottom);
         setSupportActionBar(panel_Toolbar_Top);
 
@@ -100,16 +93,6 @@ public class MainActivity extends AppCompatActivity {
         updateUI();
 
     }
-
-//    private void setFragments() {
-//        panel_fragments = new Fragment[1];
-//        panel_fragments[1] = new HomePageFragment().setActivity(this);
-////        panel_fragments[PROFILE] = new ProfileFragment().setActivity(this);
-////        panel_fragments[CLOSET] = new ClosetFragment().setActivity(this);
-////        panel_fragments[OUTFITS] = new OutfitsFragment().setActivity(this);
-////        panel_fragments[FAVORITES] = new FavoritesFragment().setActivity(this);
-//
-//    }
 
 
     private void findViews() {
@@ -176,28 +159,17 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    /**
-     * Load ImagePicker activity to choose the new profile picture
-     */
-    private void editPic() {
-        ImagePicker.with(MainActivity.this)
-                .crop(1f, 1f)            //Crop image(Optional), Check Customization for more option
-                .compress(1024)            //Final image size will be less than 1 MB(Optional)
-                .maxResultSize(1080, 1080)
-                //Final image resolution will be less than 1080 x 1080(Optional)
-                .start();
-    }
 
     private void updateUI() {
 
-        DatabaseReference myRef = realtimeDB.getReference("users/").child(FirebaseAuth.getInstance().getCurrentUser().getUid());
+        DatabaseReference myRef = realtimeDB.getReference(Keys.KEY_USERS).child(FirebaseAuth.getInstance().getCurrentUser().getUid());
 
         myRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                header_TXT_username.setText(snapshot.child("name").getValue(String.class));
+                header_TXT_username.setText(snapshot.child(Keys.KEY_USER_NAME).getValue(String.class));
 
-                Uri myUri = Uri.parse(snapshot.child("profileImgUrl/").getValue(String.class));
+                Uri myUri = Uri.parse(snapshot.child(Keys.KEY_USER_PROFILE_IMAGE_URL).getValue(String.class));
                 Glide.with(MainActivity.this)
                         .load(myUri)
                         .into(header_IMG_user);
@@ -215,15 +187,16 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 ArrayList<String> temp = new ArrayList<>();
-                for (DataSnapshot child : snapshot.child("users").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child("lists").getChildren()) {
+                for (DataSnapshot child : snapshot.child(Keys.KEY_USERS).child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child(Keys.KEY_LISTS).getChildren()) {
 
                     String listStr = child.getValue(String.class);
                     temp.add(listStr);
 
                 }
                 for (String id : temp) {
-                    DataSnapshot st = snapshot.child("lists").child(id);
-                    List tempList = new List(st.child("title").getValue(String.class), id);
+                    DataSnapshot st = snapshot.child(Keys.KEY_LISTS).child(id);
+                    List tempList = new List(st.child(Keys.KEY_LIST_TITLE).getValue(String.class), id);
+                    tempList.setImage(st.child(Keys.KEY_LIST_IMAGE).getValue(String.class));
                     myLists.add(tempList);
                 }
 
@@ -249,72 +222,73 @@ public class MainActivity extends AppCompatActivity {
                 Bundle bundle = new Bundle();
                 bundle.putString("currentListName", currentListName);
                 bundle.putString("currentListSerialNumber", currentListSerialNumber);
-                Log.d("pttt",currentListSerialNumber + " yy");
                 intent.putExtra("Bundle", bundle);
                 startActivity(intent);
             }
 
             @Override
             public void longClick(List list, int position) {
-                //  delete(position, list.getTitle());
+                delete(position, list.getSerialNumber());
             }
         });
         main_RECYC_lists.setLayoutManager(new GridLayoutManager(this, 1));
         main_RECYC_lists.setAdapter(adapter);
     }
 
+
+    private void delete(int position, String list_id) {
+        //delete from lists db
+        DatabaseReference listsRef = realtimeDB.getReference(Keys.KEY_LISTS).child(list_id);
+        listsRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                // remove the value at reference
+                snapshot.getRef().removeValue();
+                adapter.notifyItemRemoved(position);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+
+        });
+
+        //delete from users db
+        DatabaseReference usersRef = realtimeDB.getReference(Keys.KEY_USERS);
+
+        usersRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+
+//                for (DataSnapshot child : snapshot.child("lists").getChildren()) {
+//                    Log.d("pttt", "Log 1: " + child.getValue().toString());
+//                        if (child.getValue(String.class).equals(list_id)) {
+//                            snapshot.getRef().removeValue();
+//                            adapter.notifyItemRemoved(position);
 //
-//    private void delete(int position, String name) {
-//        // creating a variable for our Database
-//        // Reference for Firebase.
-//        DatabaseReference dbref= realtimeDB.getReference(Keys.KEY_USERS).child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child("lists");
-//        // we are use add listerner
-//        // for event listener method
-//        // which is called with query.
-//        Query query=dbref.child(name);
-//        query.addListenerForSingleValueEvent(new ValueEventListener() {
-//            @Override
-//            public void onDataChange(@NonNull DataSnapshot snapshot) {
-//                // remove the value at reference
-//                snapshot.getRef().removeValue();
-//                //dataManager.removeList(position);
-//                adapter.notifyItemRemoved(position);
-//            }
+//                        }
 //
-//            @Override
-//            public void onCancelled(@NonNull DatabaseError error) {
 //
-//            }
-//
-//        });
-//
-//        DatabaseReference lref= realtimeDB.getReference(Keys.KEY_LISTS).child(dataManager.getListUIDByName(currentListName));
-//
-//        Query query2=lref.child(currentListSerialNumber);
-//        query2.addListenerForSingleValueEvent(new ValueEventListener() {
-//            @Override
-//            public void onDataChange(@NonNull DataSnapshot snapshot) {
-//                // remove the value at reference
-//                snapshot.getRef().removeValue();
-//                //dataManager.removeList(position);
-//               // adapter.notifyItemRemoved(position);
-//            }
-//
-//            @Override
-//            public void onCancelled(@NonNull DatabaseError error) {
-//
-//            }
-//
-//        });
-//
-//    }
+//                }
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+
+        });
+        myLists.remove(position);
+    }
 
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         header_BAR_progress.setVisibility(View.VISIBLE);
-        StorageReference storageRef = dataManager.getStorage().getReference().child(KEY_PROFILE_PICTURES).child(dataManager.getFirebaseAuth().getCurrentUser().getUid());
+        StorageReference storageRef = dataManager.getStorage().getReference().child(Keys.KEY_PROFILE_PICTURES).child(dataManager.getFirebaseAuth().getCurrentUser().getUid());
         if (data != null) {
             Uri uri = data.getData();
             header_IMG_user.setImageURI(uri);
@@ -341,7 +315,7 @@ public class MainActivity extends AppCompatActivity {
                             public void onSuccess(Uri uri) {
                                 currentUser.setProfileImgUrl(uri.toString());
                                 //Store the user UID by Phone number
-                                DatabaseReference myRef = realtimeDB.getReference("users").child(userToStoreNav.getUid());
+                                DatabaseReference myRef = realtimeDB.getReference(Keys.KEY_USERS).child(userToStoreNav.getUid());
                                 myRef.get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
                                     @Override
                                     public void onComplete(@NonNull Task<DataSnapshot> task) {

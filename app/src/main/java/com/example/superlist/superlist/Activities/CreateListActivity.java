@@ -45,10 +45,13 @@ public class CreateListActivity extends AppCompatActivity {
     private TextInputLayout form_EDT_name;
     private MaterialButton panel_BTN_create;
 
+    //DB
     private final DataManager dataManager = DataManager.getInstance();
     private final FirebaseDatabase realtimeDB = dataManager.getRealTimeDB();
 
-    private String myDownloadUri;
+    //Default
+    private String myDownloadUri = "https://firebasestorage.googleapis.com/v0/b/superlist-ad7f9.appspot.com/o/default_pictures%2Fic_default_list.jpg?alt=media&token=515aea93-d3de-468c-89b6-4d3e418a0a4f";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -74,17 +77,10 @@ public class CreateListActivity extends AppCompatActivity {
             }
         });
 
-        createList_FAB_profile_pic.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                choseCover();
-            }
-        });
 
         createList_IMG_user.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 choseCover();
             }
         });
@@ -98,21 +94,19 @@ public class CreateListActivity extends AppCompatActivity {
 
                 DatabaseReference listRef = realtimeDB.getReference(Keys.KEY_LISTS).child(tempList.getSerialNumber());
 
-                listRef.child("image").setValue(tempList.getImage());
-                listRef.child("title").setValue(tempList.getTitle());
-                listRef.child("serial").setValue(tempList.getSerialNumber());;
+                listRef.child(Keys.KEY_LIST_IMAGE).setValue(myDownloadUri);
+                listRef.child(Keys.KEY_LIST_TITLE).setValue(tempList.getTitle());
+                listRef.child(Keys.KEY_LIST_SERIAL).setValue(tempList.getSerialNumber());;
                 listRef.child("itemsCounter").setValue(0);
 
-                Log.d("pttt", tempList.toString());
-
                 //add list serial number to current user
-                DatabaseReference userRef  = realtimeDB.getReference(Keys.KEY_USERS).child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child("lists");
+                DatabaseReference userRef  = realtimeDB.getReference(Keys.KEY_USERS).child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child(Keys.KEY_LISTS);
                 userRef.addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
                         ArrayList<String> myLists = new ArrayList<>();
                         for(DataSnapshot dataSnapshot: snapshot.getChildren()) {
-                            myLists.add(dataSnapshot.getValue(String.class)); //save pervious list
+                            myLists.add(dataSnapshot.getValue(String.class)); //save previous list
                         }
                         myLists.add(tempList.getSerialNumber());
                         userRef.setValue(myLists);
@@ -123,9 +117,7 @@ public class CreateListActivity extends AppCompatActivity {
 
                     }
                 });
-//                userRef.child("lists").child(tempList.getTitle()).child("serialNumber").setValue(tempList.getSerialNumber());
-//                userRef.child("lists").child(tempList.getTitle()).child("image").setValue(tempList.getImage());
-//                userRef.child("lists").child(tempList.getTitle()).child("title").setValue(tempList.getTitle());
+
                 startActivity(new Intent(CreateListActivity.this, MainActivity.class));
                 finish();
             }
@@ -133,22 +125,6 @@ public class CreateListActivity extends AppCompatActivity {
 
 
     }
-
-    /*
-     List tempList = new List(); //List(String title,String creatorUid)
-                tempList.setTitle(form_EDT_name.getEditText().getText().toString());
-                DatabaseReference myRef = realtimeDB.getReference(Keys.KEY_USERS).child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child("lists");
-                myRef.child(tempList.getTitle()).child("image").setValue(tempList.getImage());
-                myRef.child(tempList.getTitle()).child("title").setValue(tempList.getTitle());
-                myRef.child(tempList.getTitle()).child("serial").setValue(tempList.getSerialNumber());;
-                myRef.child(tempList.getTitle()).child("itemsCounter").setValue(0);
-                Log.d("pttt", tempList.toString());
-                tempList = new List(form_EDT_name.getEditText().getText().toString());
-                dataManager.addList(tempList);
-                //Log.d("pttt", tempList.toString());
-                startActivity(new Intent(CreateListActivity.this, MainActivity.class));
-                finish();
-     */
 
     /**
      * Load ImagePicker activity to choose the list cover
@@ -166,12 +142,12 @@ public class CreateListActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
 
         //View Indicates the process of the image uploading by Disabling the button
-        //  panel_BTN_update.setEnabled(false);
+        panel_BTN_create.setEnabled(false);
 
         //Reference to the exact path where we want the image to be store in Storage
         StorageReference userRef = dataManager.getStorage()
                 .getReference()
-                .child("list_pictures")
+                .child(Keys.KEY_LISTS_PICTURES)
                 .child(dataManager.getFirebaseAuth().getCurrentUser().getUid());
 
         //Get URI Data and place it in ImageView
@@ -200,7 +176,8 @@ public class CreateListActivity extends AppCompatActivity {
                             //Set the profile URL to the object we created
                             myDownloadUri = uri.toString();
                             //View Indicates the process of the image uploading Done by making the button Enabled
-                            //  panel_BTN_update.setEnabled(true);
+                            panel_BTN_create.setEnabled(true);
+
                         }
                     });
                 }

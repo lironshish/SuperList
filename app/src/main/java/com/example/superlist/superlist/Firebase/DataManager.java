@@ -1,9 +1,13 @@
 package com.example.superlist.superlist.Firebase;
 
+import android.content.Intent;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
 
+import com.example.superlist.superlist.Activities.LoginActivity;
+import com.example.superlist.superlist.Activities.MainActivity;
+import com.example.superlist.superlist.Activities.SignUpActivity;
 import com.example.superlist.superlist.Finals.Keys;
 import com.example.superlist.superlist.Objects.List;
 import com.example.superlist.superlist.Objects.User;
@@ -122,6 +126,24 @@ public class DataManager {
 
     public String getCurrentListCreator() {
         return currentListCreator;
+    }
+
+    public void loadUserFromDB() {
+        //Store the user UID by Phone number
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        DatabaseReference myRef = getRealTimeDB().getReference("users").child(user.getUid());
+        myRef.get().addOnSuccessListener(new OnSuccessListener<DataSnapshot>() {
+            @Override
+            public void onSuccess(DataSnapshot dataSnapshot) {
+                if(dataSnapshot.exists()){
+                    User user = dataSnapshot.getValue(User.class);
+                    setCurrentUser(user); // OR dataManager.getInstance().setCurrentUser(user);
+                }
+                else{
+                    //no such document
+                }
+            }
+        });
     }
 
 }

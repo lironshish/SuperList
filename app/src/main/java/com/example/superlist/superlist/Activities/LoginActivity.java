@@ -8,7 +8,6 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
-
 import com.airbnb.lottie.LottieAnimationView;
 import com.example.superlist.R;
 import com.example.superlist.superlist.Firebase.DataManager;

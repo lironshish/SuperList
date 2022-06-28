@@ -8,11 +8,8 @@ import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.content.Intent;
-import android.util.Log;
 import android.view.View;
 import com.example.superlist.R;
-
-
 import com.example.superlist.superlist.Finals.Keys;
 import com.example.superlist.superlist.Firebase.DataManager;
 import com.example.superlist.superlist.Objects.User;
@@ -23,10 +20,8 @@ import com.google.android.gms.tasks.Task;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.textfield.TextInputLayout;
-import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
@@ -35,7 +30,6 @@ import java.io.ByteArrayOutputStream;
 import de.hdodenhof.circleimageview.CircleImageView;
 public class SignUpActivity extends AppCompatActivity {
 
-
     //Profile Picture
     private FloatingActionButton signup_FAB_profile_pic;
     private CircleImageView signup_IMG_user;
@@ -43,14 +37,11 @@ public class SignUpActivity extends AppCompatActivity {
 
     private TextInputLayout form_EDT_name;
     private MaterialButton panel_BTN_update;
-
+    //DB
     private final DataManager dataManager = DataManager.getInstance();
     private final FirebaseDatabase realtimeDB = dataManager.getRealTimeDB();
 
     private User tempMyUser;
-
-    //Storage keys
-    public static final String KEY_PROFILE_PICTURES = "profile_pictures";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -132,15 +123,14 @@ public class SignUpActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-
         //View Indicates the process of the image uploading by Disabling the button
-      //  panel_BTN_update.setEnabled(false);
+         panel_BTN_update.setEnabled(false);
 
 
         //Reference to the exact path where we want the image to be store in Storage
         StorageReference userRef = dataManager.getStorage()
                 .getReference()
-                .child(KEY_PROFILE_PICTURES)
+                .child(Keys.KEY_PROFILE_PICTURES)
                 .child(dataManager.getFirebaseAuth().getCurrentUser().getUid());
 
         //Get URI Data and place it in ImageView
@@ -168,7 +158,7 @@ public class SignUpActivity extends AppCompatActivity {
                             //Set the profile URL to the object we created
                             myDownloadUri = uri.toString();
                             //View Indicates the process of the image uploading Done by making the button Enabled
-                          //  panel_BTN_update.setEnabled(true);
+                            panel_BTN_update.setEnabled(true);
                         }
                     });
                 }
@@ -179,16 +169,11 @@ public class SignUpActivity extends AppCompatActivity {
 
 
     private void storeUserInDB(User userToStore) {
-
-        //Store the user UID by Phone number
         DatabaseReference myRef = realtimeDB.getReference(Keys.KEY_USERS).child(userToStore.getUid());
-        myRef.child("name").setValue(userToStore.getName());
-        myRef.child("phoneNumber").setValue(userToStore.getPhoneNumber());
-        myRef.child("profileImgUrl").setValue(userToStore.getProfileImgUrl());
-        myRef.child("uid").setValue(userToStore.getUid());
-        Log.d("pttt","user 1: "+ userToStore.toString());
-        //dataManager.addUser(userToStore);
-        //Log.d("pttt","all users: "+ dataManager.getAllUsers().toString());
+        myRef.child(Keys.KEY_USER_NAME).setValue(userToStore.getName());
+        myRef.child(Keys.KEY_USER_PHONE_NUMBER).setValue(userToStore.getPhoneNumber());
+        myRef.child(Keys.KEY_USER_PROFILE_IMAGE_URL).setValue(userToStore.getProfileImgUrl());
+        myRef.child(Keys.KEY_USER_UID).setValue(userToStore.getUid());
         startActivity(new Intent(SignUpActivity.this, MainActivity.class));
         finish();
     }

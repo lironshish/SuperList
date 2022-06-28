@@ -29,8 +29,6 @@
                 android:background="#CDA99A"
                 app:layout_scrollFlags="scroll|enterAlways|snap"
                 app:menu="@menu/top_app_bar_menu"
-                app:navigationIcon="@drawable/ic_back"
-                app:navigationIconTint="@color/white"
                 app:title= "My Lists"
                 app:titleCentered="true"
                 android:fontFamily="@font/font_buttons"

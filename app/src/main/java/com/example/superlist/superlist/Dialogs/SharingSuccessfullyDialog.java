@@ -1,28 +1,32 @@
 package com.example.superlist.superlist.Dialogs;
 
-import android.app.AlertDialog;
+import android.app.Activity;
 import android.app.Dialog;
-import android.content.DialogInterface;
-import android.os.Bundle;
+import android.widget.ImageView;
+import android.widget.TextView;
+import com.example.superlist.R;
+import com.google.android.material.button.MaterialButton;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatDialogFragment;
+public class SharingSuccessfullyDialog {
 
-public class SharingSuccessfullyDialog extends AppCompatDialogFragment {
+    private TextView dialog_TXT_title;
+    private ImageView dialog_IMG_share;
+    private MaterialButton dialog_BTN_ok;
 
-    @NonNull
-    @Override
-    public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-        builder.setTitle("Sharing Successfully")
-                .setMessage("Sharing Successfully")
-                .setPositiveButton("ok", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
 
-                    }
-                });
-        return builder.create();
+
+    public void show(Activity activity){
+        final Dialog dialog = new Dialog(activity);
+        dialog.setContentView(R.layout.dialog_share_successfully);
+        findViews(dialog);
+        dialog.show();
+    }
+
+
+
+    public void findViews(Dialog dialog) {
+        dialog_TXT_title = dialog.findViewById(R.id.dialog_TXT_title);
+        dialog_IMG_share = dialog.findViewById(R.id.dialog_IMG_share);
+        dialog_BTN_ok = dialog.findViewById(R.id.dialog_BTN_ok);
     }
 }

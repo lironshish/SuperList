@@ -96,7 +96,11 @@ public class CreateListActivity extends AppCompatActivity {
 
                 listRef.child(Keys.KEY_LIST_IMAGE).setValue(myDownloadUri);
                 listRef.child(Keys.KEY_LIST_TITLE).setValue(tempList.getTitle());
-                listRef.child(Keys.KEY_LIST_SERIAL).setValue(tempList.getSerialNumber());;
+                listRef.child(Keys.KEY_LIST_SERIAL).setValue(tempList.getSerialNumber());
+                ArrayList<String> tempSharedUsersUID = new ArrayList<>();///
+                tempSharedUsersUID.add(FirebaseAuth.getInstance().getCurrentUser().getUid());///
+                listRef.child("sharedUsers").setValue(tempSharedUsersUID); ///
+
                 listRef.child("itemsCounter").setValue(0);
 
                 //add list serial number to current user

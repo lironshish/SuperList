@@ -261,16 +261,22 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
 
-//                for (DataSnapshot child : snapshot.child("lists").getChildren()) {
-//                    Log.d("pttt", "Log 1: " + child.getValue().toString());
-//                        if (child.getValue(String.class).equals(list_id)) {
+                for (DataSnapshot userChild : snapshot.getChildren()) {
+
+                    for (DataSnapshot newChild : userChild.child("lists").getChildren()) {
+                        if(newChild.getValue(String.class).equals(list_id)){
+                            newChild.getRef().removeValue();
+                            adapter.notifyItemRemoved(position);
+                        }
+                    }
+//                        if (userChild.ch.getValue(String.class).equals(list_id)) {
 //                            snapshot.getRef().removeValue();
 //                            adapter.notifyItemRemoved(position);
 //
 //                        }
-//
-//
-//                }
+
+
+                }
 
             }
 

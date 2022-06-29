@@ -33,23 +33,29 @@
         android:layout_marginBottom="10dp"
         android:orientation="horizontal">
 
-        <com.hbb20.CountryCodePicker
-            android:id="@+id/share_CCP_picker"
-            android:layout_width="0dp"
-            android:layout_height="75dp"
-            android:layout_gravity="center_vertical"
-            android:layout_weight="3"
-            android:background="#00CDCED1"
-            android:elevation="10dp"
-            app:ccpDialog_allowSearch="true"
-            app:ccp_countryPreference="IL,US,AU,GB"
-            app:ccp_defaultPhoneCode="972"
-            app:ccp_rememberLastSelection="true"
-            app:ccp_showArrow="true"
-            app:ccp_showNameCode="false"
-            app:ccp_showPhoneCode="true"
-            app:ccp_textGravity="CENTER"
-            app:ccp_textSize="20sp" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="60dp"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:id="@+id/share_IMG_israel_flag"
+                android:layout_width="83dp"
+                android:layout_height="44dp"
+                android:src="@drawable/ic_israel_flag" />
+
+            <TextView
+                android:id="@+id/share_TXT_code"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="+972"
+                android:textColor="@color/black"
+                android:textSize="30dp" />
+
+        </LinearLayout>
+
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/share_EDT_phone"

@@ -65,9 +65,4 @@ dependencies {
     implementation 'com.google.firebase:firebase-firestore'
     implementation 'com.google.firebase:firebase-storage'
 
-    //Country Code Picker
-    implementation 'com.hbb20:ccp:2.4.2'
-    implementation group: 'com.googlecode.libphonenumber', name: 'libphonenumber', version: '8.4.2'
-
-
 }

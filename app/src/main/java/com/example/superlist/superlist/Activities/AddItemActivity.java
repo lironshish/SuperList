@@ -11,6 +11,7 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.example.superlist.R;
+import com.example.superlist.superlist.Dialogs.WarningDialog;
 import com.example.superlist.superlist.Finals.Keys;
 import com.example.superlist.superlist.Firebase.DataManager;
 import com.example.superlist.superlist.Objects.Item;
@@ -79,10 +80,17 @@ public class AddItemActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
-                DatabaseReference myRef = realtimeDB.getReference(Keys.KEY_LISTS).child((currentListSerialNumber)).child("items");
-                myRef.addListenerForSingleValueEvent(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if(addItem_EDT_name.getEditText().getText().toString().isEmpty() || addItem_EDT_amount.getEditText().getText().toString().isEmpty()){
+                    WarningDialog warningDialog = new WarningDialog();
+                    warningDialog.show(AddItemActivity.this,"Please fill all fields");
+                }
+
+                else {
+
+                    DatabaseReference myRef = realtimeDB.getReference(Keys.KEY_LISTS).child((currentListSerialNumber)).child("items");
+                    myRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot snapshot) {
                             try {
                                 //store item in db
                                 myRef.child(addItem_EDT_name.getEditText().getText().toString()).child("name").setValue(addItem_EDT_name.getEditText().getText().toString());
@@ -91,21 +99,22 @@ public class AddItemActivity extends AppCompatActivity {
                                 myItems.add(item);
                             } catch (Exception ex) {
                             }
-                    }
+                        }
 
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError error) {
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError error) {
 
-                    }
-                });
+                        }
+                    });
 
-                Intent intent = new Intent(AddItemActivity.this, MyListActivity.class);
-                Bundle bundle = new Bundle();
-                bundle.putString("currentListName",currentListName);
-                bundle.putString("currentListSerialNumber",currentListSerialNumber);
-                intent.putExtra("Bundle",bundle);
-                startActivity(intent);
-                finish();
+                    Intent intent = new Intent(AddItemActivity.this, MyListActivity.class);
+                    Bundle bundle = new Bundle();
+                    bundle.putString("currentListName", currentListName);
+                    bundle.putString("currentListSerialNumber", currentListSerialNumber);
+                    intent.putExtra("Bundle", bundle);
+                    startActivity(intent);
+                    finish();
+                }
             }
         });
 

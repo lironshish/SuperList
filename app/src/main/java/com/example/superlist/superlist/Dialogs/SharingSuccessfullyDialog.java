@@ -2,6 +2,7 @@ package com.example.superlist.superlist.Dialogs;
 
 import android.app.Activity;
 import android.app.Dialog;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 import com.example.superlist.R;
@@ -19,9 +20,15 @@ public class SharingSuccessfullyDialog {
         final Dialog dialog = new Dialog(activity);
         dialog.setContentView(R.layout.dialog_share_successfully);
         findViews(dialog);
+        dialog_BTN_ok.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialog.dismiss();
+            }
+        });
+
         dialog.show();
     }
-
 
 
     public void findViews(Dialog dialog) {

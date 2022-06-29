@@ -13,6 +13,7 @@ import android.util.Log;
 import android.view.View;
 
 import com.example.superlist.R;
+import com.example.superlist.superlist.Dialogs.WarningDialog;
 import com.example.superlist.superlist.Finals.Keys;
 import com.example.superlist.superlist.Firebase.DataManager;
 import com.example.superlist.superlist.Objects.List;
@@ -88,46 +89,51 @@ public class CreateListActivity extends AppCompatActivity {
         panel_BTN_create.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //store list in real time DB
-                List tempList = new List(form_EDT_name.getEditText().getText().toString()); //List(String title,String creatorUid)
-                tempList.setTitle(form_EDT_name.getEditText().getText().toString());
 
-                DatabaseReference listRef = realtimeDB.getReference(Keys.KEY_LISTS).child(tempList.getSerialNumber());
+                if(form_EDT_name.getEditText().getText().toString().isEmpty()){
+                    WarningDialog warningDialog = new WarningDialog();
+                    warningDialog.show(CreateListActivity.this,"Enter Name List Please");
+                } else {
 
-                listRef.child(Keys.KEY_LIST_IMAGE).setValue(myDownloadUri);
-                listRef.child(Keys.KEY_LIST_TITLE).setValue(tempList.getTitle());
-                listRef.child(Keys.KEY_LIST_SERIAL).setValue(tempList.getSerialNumber());
-                ArrayList<String> tempSharedUsersUID = new ArrayList<>();///
-                tempSharedUsersUID.add(FirebaseAuth.getInstance().getCurrentUser().getUid());///
-                listRef.child("sharedUsers").setValue(tempSharedUsersUID); ///
+                    //store list in real time DB
+                    List tempList = new List(form_EDT_name.getEditText().getText().toString()); //List(String title,String creatorUid)
+                    tempList.setTitle(form_EDT_name.getEditText().getText().toString());
 
-                listRef.child("itemsCounter").setValue(0);
+                    DatabaseReference listRef = realtimeDB.getReference(Keys.KEY_LISTS).child(tempList.getSerialNumber());
 
-                //add list serial number to current user
-                DatabaseReference userRef  = realtimeDB.getReference(Keys.KEY_USERS).child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child(Keys.KEY_LISTS);
-                userRef.addListenerForSingleValueEvent(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot snapshot) {
-                        ArrayList<String> myLists = new ArrayList<>();
-                        for(DataSnapshot dataSnapshot: snapshot.getChildren()) {
-                            myLists.add(dataSnapshot.getValue(String.class)); //save previous list
+                    listRef.child(Keys.KEY_LIST_IMAGE).setValue(myDownloadUri);
+                    listRef.child(Keys.KEY_LIST_TITLE).setValue(tempList.getTitle());
+                    listRef.child(Keys.KEY_LIST_SERIAL).setValue(tempList.getSerialNumber());
+                    ArrayList<String> tempSharedUsersUID = new ArrayList<>();///
+                    tempSharedUsersUID.add(FirebaseAuth.getInstance().getCurrentUser().getUid());///
+                    listRef.child("sharedUsers").setValue(tempSharedUsersUID); ///
+
+                    listRef.child("itemsCounter").setValue(0);
+
+                    //add list serial number to current user
+                    DatabaseReference userRef = realtimeDB.getReference(Keys.KEY_USERS).child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child(Keys.KEY_LISTS);
+                    userRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot snapshot) {
+                            ArrayList<String> myLists = new ArrayList<>();
+                            for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
+                                myLists.add(dataSnapshot.getValue(String.class)); //save previous list
+                            }
+                            myLists.add(tempList.getSerialNumber());
+                            userRef.setValue(myLists);
                         }
-                        myLists.add(tempList.getSerialNumber());
-                        userRef.setValue(myLists);
-                    }
 
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError error) {
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError error) {
 
-                    }
-                });
+                        }
+                    });
 
-                startActivity(new Intent(CreateListActivity.this, MainActivity.class));
-                finish();
+                    startActivity(new Intent(CreateListActivity.this, MainActivity.class));
+                    finish();
+                }
             }
         });
-
-
     }
 
     /**

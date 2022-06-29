@@ -17,7 +17,7 @@
         <entry key="..\:/Users/liron0/AndroidStudioProjects/SuperList/app/src/main/res/drawable/ic_person_add.xml" value="0.1095" />
         <entry key="..\:/Users/liron0/AndroidStudioProjects/SuperList/app/src/main/res/drawable/ic_settings.xml" value="0.2005" />
         <entry key="..\:/Users/liron0/AndroidStudioProjects/SuperList/app/src/main/res/drawable/ic_update.xml" value="0.1985" />
-        <entry key="..\:/Users/liron0/AndroidStudioProjects/SuperList/app/src/main/res/layout/activity_add_item.xml" value="0.25416666666666665" />
+        <entry key="..\:/Users/liron0/AndroidStudioProjects/SuperList/app/src/main/res/layout/activity_add_item.xml" value="0.2" />
         <entry key="..\:/Users/liron0/AndroidStudioProjects/SuperList/app/src/main/res/layout/activity_create_list.xml" value="0.16799999999999998" />
         <entry key="..\:/Users/liron0/AndroidStudioProjects/SuperList/app/src/main/res/layout/activity_login.xml" value="0.190625" />
         <entry key="..\:/Users/liron0/AndroidStudioProjects/SuperList/app/src/main/res/layout/activity_main.xml" value="0.2" />
@@ -29,7 +29,7 @@
         <entry key="..\:/Users/liron0/AndroidStudioProjects/SuperList/app/src/main/res/layout/dialog_share_fail.xml" value="0.264" />
         <entry key="..\:/Users/liron0/AndroidStudioProjects/SuperList/app/src/main/res/layout/dialog_share_succefuly.xml" value="0.13229166666666667" />
         <entry key="..\:/Users/liron0/AndroidStudioProjects/SuperList/app/src/main/res/layout/dialog_share_successfully.xml" value="0.1" />
-        <entry key="..\:/Users/liron0/AndroidStudioProjects/SuperList/app/src/main/res/layout/dialog_warning.xml" value="0.25416666666666665" />
+        <entry key="..\:/Users/liron0/AndroidStudioProjects/SuperList/app/src/main/res/layout/dialog_warning.xml" value="0.176" />
         <entry key="..\:/Users/liron0/AndroidStudioProjects/SuperList/app/src/main/res/layout/fragment_home_page_fragment.xml" value="0.25416666666666665" />
         <entry key="..\:/Users/liron0/AndroidStudioProjects/SuperList/app/src/main/res/layout/fragment_lists.xml" value="0.11775362318840579" />
         <entry key="..\:/Users/liron0/AndroidStudioProjects/SuperList/app/src/main/res/layout/lis_card.xml" value="0.176" />

@@ -14,6 +14,7 @@ import com.airbnb.lottie.LottieAnimationView;
 import com.example.superlist.R;
 import com.example.superlist.superlist.Dialogs.SharingFailedDialog;
 import com.example.superlist.superlist.Dialogs.SharingSuccessfullyDialog;
+import com.example.superlist.superlist.Dialogs.WarningDialog;
 import com.example.superlist.superlist.Finals.Keys;
 import com.example.superlist.superlist.Firebase.DataManager;
 import com.example.superlist.superlist.Objects.List;
@@ -125,40 +126,56 @@ public class ShareListActivity extends AppCompatActivity {
                 usersRef.addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
-                        for (DataSnapshot child : snapshot.getChildren()) {
-                            Log.d("pttt", "L " + child.getChildren().toString());
-                            if (child.child("phoneNumber").getValue().toString().equals(wantedUserPhoneNumber)) {
-                                wantedUserUID = child.child("uid").getValue(String.class);
-                                sharedList.setSerialNumber(currentListSerialNumber);
-                                sharedList.setTitle(currentListName);
-                                shareList(wantedUserUID, sharedList);
-                                SharingSuccessfullyDialog shareDialog = new SharingSuccessfullyDialog();
-                                shareDialog.show(ShareListActivity.this);
+                        boolean exist = false;
+                        for (DataSnapshot userChild : snapshot.getChildren()) {
+
+                            if (userChild.child("phoneNumber").getValue().toString().equals(wantedUserPhoneNumber)) {
+                                exist = true;
+                                wantedUserUID = userChild.child("uid").getValue(String.class);
+                                boolean shared = false;
+                                for (DataSnapshot newChild : userChild.child("lists").getChildren()) {
+
+                                    if (newChild.getValue(String.class).equals(currentListSerialNumber)) {
+                                        shared = true;
+
+                                        WarningDialog warningDialog = new WarningDialog();
+                                        warningDialog.show(ShareListActivity.this, "This list is already shared with this user");
+                                    }
+                                }
+                                if (!shared) {
+                                    sharedList.setSerialNumber(currentListSerialNumber);
+                                    sharedList.setTitle(currentListName);
+                                    shareList(wantedUserUID, sharedList);
+
+                                    // update db with the shared users uid
+                                    DatabaseReference listsRef = realtimeDB.getReference(Keys.KEY_LISTS).child(currentListSerialNumber).child("sharedUsers");
+                                    listsRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                                        @Override
+                                        public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                            ArrayList<String> sharedUsers = new ArrayList<>();
+                                            for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
+                                                sharedUsers.add(dataSnapshot.getValue(String.class)); //save previous list
+                                            }
+                                            sharedUsers.add(wantedUserUID);
+                                            listsRef.setValue(sharedUsers);
+                                        }
+
+                                        @Override
+                                        public void onCancelled(@NonNull DatabaseError error) {
+
+                                        }
+                                    });
+
+                                    SharingSuccessfullyDialog shareDialog = new SharingSuccessfullyDialog();
+                                    shareDialog.show(ShareListActivity.this);
+                                }
+
                             }
-
+                        }
+                        if (!exist) {
                             SharingFailedDialog shareFailDialog = new SharingFailedDialog();
-                            shareFailDialog.show(ShareListActivity.this,"This phone does not exist in the system");
+                            shareFailDialog.show(ShareListActivity.this, "This phone does not exist in the system");
                         }
-                    }
-
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError error) {
-
-                    }
-                });
-
-                // update db with the shared users uid
-                DatabaseReference listsRef  = realtimeDB.getReference(Keys.KEY_LISTS).child(currentListSerialNumber).child("sharedUsers");
-                listsRef.addListenerForSingleValueEvent(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot snapshot) {
-                        ArrayList<String> sharedUsers = new ArrayList<>();
-                        for(DataSnapshot dataSnapshot: snapshot.getChildren()) {
-                            sharedUsers.add(dataSnapshot.getValue(String.class)); //save previous list
-                        }
-                        sharedUsers.add(wantedUserUID);
-                        Log.d("pttt", sharedUsers.toString());
-                        listsRef.setValue(sharedUsers);
                     }
 
                     @Override
@@ -202,7 +219,7 @@ public class ShareListActivity extends AppCompatActivity {
 
             }
         });
-
-        //TODO: Add window "Shared Successful"
     }
+
+
 }

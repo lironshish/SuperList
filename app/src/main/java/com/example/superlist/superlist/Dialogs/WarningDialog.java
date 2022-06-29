@@ -18,7 +18,7 @@ public class WarningDialog {
 
     public void show(Activity activity, String newMessage) {
         final Dialog dialog = new Dialog(activity);
-        dialog.setContentView(R.layout.dialog_share_fail);
+        dialog.setContentView(R.layout.dialog_warning);
 
         findViews(dialog);
         dialog_TXT_message.setText(newMessage);

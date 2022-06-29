@@ -5,25 +5,25 @@ public class Item {
     private String name;
     private float amount = 0;
     private String listUid;
-    private String type = " KILO"; //default
+    private String suffix = " KILO"; //default
 
     public  Item() {
 
     }
 
-    public Item(String name, float amount, String listUid, String type) {
+    public Item(String name, float amount, String listUid, String suffix) {
         this.name = name;
         this.amount = amount;
         this.listUid = listUid;
-        this.type = type;
+        this.suffix = suffix;
     }
 
     public String getSuffix() {
-        return type;
+        return suffix;
     }
 
-    public void setSuffix(String type) {
-        this.type = type;
+    public void setSuffix(String suffix) {
+        this.suffix = suffix;
     }
 
     public String getName() {

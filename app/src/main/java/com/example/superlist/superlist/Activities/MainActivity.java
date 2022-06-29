@@ -264,17 +264,11 @@ public class MainActivity extends AppCompatActivity {
                 for (DataSnapshot userChild : snapshot.getChildren()) {
 
                     for (DataSnapshot newChild : userChild.child("lists").getChildren()) {
-                        if(newChild.getValue(String.class).equals(list_id)){
+                        if (newChild.getValue(String.class).equals(list_id)) {
                             newChild.getRef().removeValue();
                             adapter.notifyItemRemoved(position);
                         }
                     }
-//                        if (userChild.ch.getValue(String.class).equals(list_id)) {
-//                            snapshot.getRef().removeValue();
-//                            adapter.notifyItemRemoved(position);
-//
-//                        }
-
 
                 }
 

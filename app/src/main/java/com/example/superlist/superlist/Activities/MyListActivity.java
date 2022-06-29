@@ -126,9 +126,11 @@ public class MyListActivity extends AppCompatActivity {
                     try {
                         String name = child.child(Keys.KEY_ITEM_NAME).getValue(String.class);
                         Float amount = child.child(Keys.KEY_ITEM_AMOUNT).getValue(Float.class);
+                        String suffix = child.child("suffix").getValue(String.class);
                         Item tempItem = new Item();
                         tempItem.setName(name);
                         tempItem.setAmount(amount);
+                        tempItem.setSuffix(suffix);
                         myItems.add(tempItem);
                     } catch (Exception ex) {
                     }

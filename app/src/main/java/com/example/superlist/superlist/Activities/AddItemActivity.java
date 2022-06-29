@@ -95,6 +95,7 @@ public class AddItemActivity extends AppCompatActivity {
                                 //store item in db
                                 myRef.child(addItem_EDT_name.getEditText().getText().toString()).child("name").setValue(addItem_EDT_name.getEditText().getText().toString());
                                 myRef.child(addItem_EDT_name.getEditText().getText().toString()).child("amount").setValue(Float.parseFloat(addItem_EDT_amount.getEditText().getText().toString()));
+                                myRef.child(addItem_EDT_name.getEditText().getText().toString()).child("suffix").setValue(item.getSuffix());
                                 item.setAmount(Float.parseFloat(addItem_EDT_amount.getEditText().getText().toString()));
                                 myItems.add(item);
                             } catch (Exception ex) {

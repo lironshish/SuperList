@@ -21,12 +21,15 @@
         <entry key="..\:/Users/liron0/AndroidStudioProjects/SuperList/app/src/main/res/layout/activity_create_list.xml" value="0.16799999999999998" />
         <entry key="..\:/Users/liron0/AndroidStudioProjects/SuperList/app/src/main/res/layout/activity_login.xml" value="0.190625" />
         <entry key="..\:/Users/liron0/AndroidStudioProjects/SuperList/app/src/main/res/layout/activity_main.xml" value="0.2" />
-        <entry key="..\:/Users/liron0/AndroidStudioProjects/SuperList/app/src/main/res/layout/activity_my_list.xml" value="0.2" />
+        <entry key="..\:/Users/liron0/AndroidStudioProjects/SuperList/app/src/main/res/layout/activity_my_list.xml" value="0.136" />
         <entry key="..\:/Users/liron0/AndroidStudioProjects/SuperList/app/src/main/res/layout/activity_share_list.xml" value="0.176" />
         <entry key="..\:/Users/liron0/AndroidStudioProjects/SuperList/app/src/main/res/layout/activity_sign_up.xml" value="0.152" />
         <entry key="..\:/Users/liron0/AndroidStudioProjects/SuperList/app/src/main/res/layout/activity_splash.xml" value="0.152" />
         <entry key="..\:/Users/liron0/AndroidStudioProjects/SuperList/app/src/main/res/layout/activity_test.xml" value="0.1" />
-        <entry key="..\:/Users/liron0/AndroidStudioProjects/SuperList/app/src/main/res/layout/dialog_share_fail.xml" value="0.264" />
+        <entry key="..\:/Users/liron0/AndroidStudioProjects/SuperList/app/src/main/res/layout/dialog.xml" value="0.1328125" />
+        <entry key="..\:/Users/liron0/AndroidStudioProjects/SuperList/app/src/main/res/layout/dialog_get_message.xml" value="0.1328125" />
+        <entry key="..\:/Users/liron0/AndroidStudioProjects/SuperList/app/src/main/res/layout/dialog_send_messgae.xml" value="0.264" />
+        <entry key="..\:/Users/liron0/AndroidStudioProjects/SuperList/app/src/main/res/layout/dialog_share_fail.xml" value="0.152" />
         <entry key="..\:/Users/liron0/AndroidStudioProjects/SuperList/app/src/main/res/layout/dialog_share_succefuly.xml" value="0.13229166666666667" />
         <entry key="..\:/Users/liron0/AndroidStudioProjects/SuperList/app/src/main/res/layout/dialog_share_successfully.xml" value="0.1" />
         <entry key="..\:/Users/liron0/AndroidStudioProjects/SuperList/app/src/main/res/layout/dialog_warning.xml" value="0.176" />

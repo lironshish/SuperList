@@ -20,6 +20,9 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.example.superlist.R;
 import com.example.superlist.superlist.Adapters.ItemAdapter;
+import com.example.superlist.superlist.Dialogs.GetMessageDialog;
+import com.example.superlist.superlist.Dialogs.SendMessageDialog;
+import com.example.superlist.superlist.Dialogs.WarningDialog;
 import com.example.superlist.superlist.Finals.Keys;
 import com.example.superlist.superlist.Firebase.DataManager;
 import com.example.superlist.superlist.Objects.Item;
@@ -72,6 +75,7 @@ public class MyListActivity extends AppCompatActivity {
 
     private MaterialToolbar panel_Toolbar_Top;
     private MenuItem add_person;
+    private MenuItem chat;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -87,6 +91,7 @@ public class MyListActivity extends AppCompatActivity {
         }
 
         findViews();
+        checkIfThereIsAMessage();
         initButtons();
         add_person.setVisible(true);
         updateUI();
@@ -116,7 +121,7 @@ public class MyListActivity extends AppCompatActivity {
         });
 
 
-        DatabaseReference userRef = realtimeDB.getReference(Keys.KEY_LISTS).child(currentListSerialNumber).child("items");
+        DatabaseReference userRef = realtimeDB.getReference(Keys.KEY_LISTS).child(currentListSerialNumber).child(Keys.KEY_ITEMS);
 
         userRef.addValueEventListener(new ValueEventListener() {
             @Override
@@ -126,7 +131,7 @@ public class MyListActivity extends AppCompatActivity {
                     try {
                         String name = child.child(Keys.KEY_ITEM_NAME).getValue(String.class);
                         Float amount = child.child(Keys.KEY_ITEM_AMOUNT).getValue(Float.class);
-                        String suffix = child.child("suffix").getValue(String.class);
+                        String suffix = child.child(Keys.KEY_ITEM_SUFFIX).getValue(String.class);
                         Item tempItem = new Item();
                         tempItem.setName(name);
                         tempItem.setAmount(amount);
@@ -203,7 +208,29 @@ public class MyListActivity extends AppCompatActivity {
         drawer_layout = findViewById(R.id.drawer_layout);
         add_person = panel_Toolbar_Top.getMenu().findItem(R.id.add_person);
 
+        chat = panel_AppBar_bottom.getMenu().findItem(R.id.menu_chat);
+        chat.setVisible(true);
+
     }
+
+    private void checkIfThereIsAMessage() {
+        DatabaseReference myRef = realtimeDB.getReference(Keys.KEY_USERS).child(FirebaseAuth.getInstance().getCurrentUser().getUid());
+        myRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (!snapshot.child(Keys.KEY_USER_MESSAGE).getValue(String.class).equals(Keys.KEY_NO_MESSAGE)) {
+                    GetMessageDialog getMessageDialog = new GetMessageDialog();
+                    getMessageDialog.show(MyListActivity.this, FirebaseAuth.getInstance().getCurrentUser().getUid(), snapshot.child(Keys.KEY_USER_MESSAGE).getValue(String.class));
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+    }
+
 
     private void initButtons() {
 
@@ -231,6 +258,41 @@ public class MyListActivity extends AppCompatActivity {
                 return true;
             }
 
+        });
+
+        ArrayList<String> sharedUsers = new ArrayList<>();
+        panel_AppBar_bottom.getMenu().getItem(0).setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem menuItem) {
+
+                DatabaseReference myRef = realtimeDB.getReference(Keys.KEY_LISTS).child(currentListSerialNumber).child(Keys.KEY_SHARED_USERS);
+                myRef.addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
+                            if (!dataSnapshot.getValue(String.class).equals(FirebaseAuth.getInstance().getCurrentUser().getUid())) {
+                                sharedUsers.add(dataSnapshot.getValue(String.class));
+                            }
+                        }
+
+                        if (sharedUsers.size() == 0) {
+                            WarningDialog warningDialog = new WarningDialog();
+                            warningDialog.show(MyListActivity.this, "There are no shared users with this list");
+                        } else {
+                            SendMessageDialog sendMessageDialog = new SendMessageDialog();
+                            sendMessageDialog.show(MyListActivity.this, sharedUsers);
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+
+                    }
+                });
+
+
+                return false;
+            }
         });
 
         panel_AppBar_bottom.setNavigationOnClickListener(new View.OnClickListener() {

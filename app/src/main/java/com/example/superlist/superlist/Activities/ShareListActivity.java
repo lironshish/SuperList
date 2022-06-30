@@ -77,18 +77,18 @@ public class ShareListActivity extends AppCompatActivity {
                 String newPhone = phoneTemp.replace("-", "");
                 wantedUserPhoneNumber = share_TXT_code.getText().toString() + newPhone;
 
-                DatabaseReference usersRef = realtimeDB.getReference("users/");
+                DatabaseReference usersRef = realtimeDB.getReference(Keys.KEY_USERS);
                 usersRef.addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
                         boolean exist = false;
                         for (DataSnapshot userChild : snapshot.getChildren()) {
 
-                            if (userChild.child("phoneNumber").getValue().toString().equals(wantedUserPhoneNumber)) {
+                            if (userChild.child(Keys.KEY_USER_PHONE_NUMBER).getValue().toString().equals(wantedUserPhoneNumber)) {
                                 exist = true;
-                                wantedUserUID = userChild.child("uid").getValue(String.class);
+                                wantedUserUID = userChild.child(Keys.KEY_USER_UID).getValue(String.class);
                                 boolean shared = false;
-                                for (DataSnapshot newChild : userChild.child("lists").getChildren()) {
+                                for (DataSnapshot newChild : userChild.child(Keys.KEY_LISTS).getChildren()) {
 
                                     if (newChild.getValue(String.class).equals(currentListSerialNumber)) {
                                         shared = true;
@@ -156,7 +156,7 @@ public class ShareListActivity extends AppCompatActivity {
 
 
     private void shareList(String userSharedUID, List list) {
-        DatabaseReference listRef = realtimeDB.getReference("users/").child(userSharedUID).child("lists");
+        DatabaseReference listRef = realtimeDB.getReference(Keys.KEY_USERS).child(userSharedUID).child(Keys.KEY_LISTS);
         listRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {

@@ -1,20 +1,11 @@
 package com.example.superlist.superlist.Firebase;
 
-import android.content.Intent;
-import android.util.Log;
-
 import androidx.annotation.NonNull;
 
-import com.example.superlist.superlist.Activities.LoginActivity;
-import com.example.superlist.superlist.Activities.MainActivity;
-import com.example.superlist.superlist.Activities.SignUpActivity;
 import com.example.superlist.superlist.Finals.Keys;
-import com.example.superlist.superlist.Objects.List;
 import com.example.superlist.superlist.Objects.User;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
+
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -22,14 +13,9 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.messaging.FirebaseMessaging;
 import com.google.firebase.storage.FirebaseStorage;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 
 public class DataManager {
 
@@ -40,14 +26,12 @@ public class DataManager {
     private User currentUser;
     private String currentListUid;
     private String currentListCreator;
-   // private MyItem currentItem;
     private String currentCategoryUid;
     private String currentListTitle;
-    private String token;
 
     private static DataManager single_instance = null;
 
-    private DataManager(){
+    private DataManager() {
         firebaseAuth = FirebaseAuth.getInstance();
         storage = FirebaseStorage.getInstance();
         realTimeDB = FirebaseDatabase.getInstance();
@@ -69,7 +53,7 @@ public class DataManager {
         return realTimeDB;
     }
 
-    public  FirebaseAuth getFirebaseAuth() {
+    public FirebaseAuth getFirebaseAuth() {
         return firebaseAuth;
     }
 
@@ -104,14 +88,6 @@ public class DataManager {
         this.currentListTitle = currentListTitle;
     }
 
-//    public MyItem getCurrentItem() {
-//        return currentItem;
-//    }
-//
-//    public void setCurrentItem(MyItem currentItem) {
-//        this.currentItem = currentItem;
-//    }
-
     public String getCurrentCategoryUid() {
         return currentCategoryUid;
     }
@@ -131,19 +107,62 @@ public class DataManager {
     public void loadUserFromDB() {
         //Store the user UID by Phone number
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-        DatabaseReference myRef = getRealTimeDB().getReference("users").child(user.getUid());
+        DatabaseReference myRef = getRealTimeDB().getReference(Keys.KEY_USERS).child(user.getUid());
         myRef.get().addOnSuccessListener(new OnSuccessListener<DataSnapshot>() {
             @Override
             public void onSuccess(DataSnapshot dataSnapshot) {
-                if(dataSnapshot.exists()){
+                if (dataSnapshot.exists()) {
                     User user = dataSnapshot.getValue(User.class);
                     setCurrentUser(user); // OR dataManager.getInstance().setCurrentUser(user);
-                }
-                else{
+                } else {
                     //no such document
                 }
             }
         });
+    }
+
+    public void sendMessage(String message, ArrayList<String> sharedUsers) {
+        DatabaseReference myRef = getRealTimeDB().getReference(Keys.KEY_USERS);
+        myRef.addValueEventListener(new ValueEventListener() {
+
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
+                    for (int i = 0; i < sharedUsers.size(); i++) {
+                        if (dataSnapshot.getKey().equals(sharedUsers.get(i))) {
+                            myRef.child(dataSnapshot.getKey()).child("message").setValue(message);
+                        }
+                    }
+
+                }
+            }
+
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+
+
+    }
+
+
+    public void deleteMessageFromDB(String userUID) {
+        DatabaseReference myRef = getRealTimeDB().getReference(Keys.KEY_USERS).child(userUID);
+        myRef.child(Keys.KEY_USER_MESSAGE).setValue(Keys.KEY_NO_MESSAGE);
+//        myRef.addValueEventListener(new ValueEventListener() {
+//
+//            @Override
+//            public void onDataChange(@NonNull DataSnapshot snapshot) {
+//                snapshot.child("message").
+//            }
+//
+//            @Override
+//            public void onCancelled(@NonNull DatabaseError error) {
+//
+//            }
+//        });
     }
 
 }

@@ -78,6 +78,7 @@ public class MainActivity extends AppCompatActivity {
 
     private String currentListName;
     private String currentListSerialNumber;
+    private MenuItem chat;
 
 
     @Override
@@ -108,6 +109,8 @@ public class MainActivity extends AppCompatActivity {
         header_TXT_username = header.findViewById(R.id.header_TXT_username);
         header_IMG_user = header.findViewById(R.id.header_IMG_user);
         header_BAR_progress = header.findViewById(R.id.header_BAR_progress);
+        chat = panel_AppBar_bottom.getMenu().findItem(R.id.menu_chat);
+        chat.setVisible(false);
 
     }
 
@@ -263,7 +266,7 @@ public class MainActivity extends AppCompatActivity {
 
                 for (DataSnapshot userChild : snapshot.getChildren()) {
 
-                    for (DataSnapshot newChild : userChild.child("lists").getChildren()) {
+                    for (DataSnapshot newChild : userChild.child(Keys.KEY_LISTS).getChildren()) {
                         if (newChild.getValue(String.class).equals(list_id)) {
                             newChild.getRef().removeValue();
                             adapter.notifyItemRemoved(position);

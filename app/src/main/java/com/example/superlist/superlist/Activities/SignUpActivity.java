@@ -174,6 +174,7 @@ public class SignUpActivity extends AppCompatActivity {
         myRef.child(Keys.KEY_USER_PHONE_NUMBER).setValue(userToStore.getPhoneNumber());
         myRef.child(Keys.KEY_USER_PROFILE_IMAGE_URL).setValue(userToStore.getProfileImgUrl());
         myRef.child(Keys.KEY_USER_UID).setValue(userToStore.getUid());
+        myRef.child(Keys.KEY_USER_MESSAGE).setValue(Keys.KEY_NO_MESSAGE);
         startActivity(new Intent(SignUpActivity.this, MainActivity.class));
         finish();
     }

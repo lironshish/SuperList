@@ -29,8 +29,9 @@ public class SendMessageDialog {
         dialog_BTN_send.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                sendMessage(sharedUsers, listID);
                 dialog.dismiss();
+                sendMessage(sharedUsers, listID);
+
             }
         });
 

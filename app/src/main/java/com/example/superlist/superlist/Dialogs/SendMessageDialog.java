@@ -20,7 +20,7 @@ public class SendMessageDialog {
     private final DataManager dataManager = DataManager.getInstance();
 
 
-    public void show(Activity activity, ArrayList<String> sharedUsers) {
+    public void show(Activity activity, ArrayList<String> sharedUsers, String listID) {
         final Dialog dialog = new Dialog(activity);
         dialog.setContentView(R.layout.dialog_send_messgae);
 
@@ -29,7 +29,7 @@ public class SendMessageDialog {
         dialog_BTN_send.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                sendMessage(sharedUsers);
+                sendMessage(sharedUsers, listID);
                 dialog.dismiss();
             }
         });
@@ -38,10 +38,10 @@ public class SendMessageDialog {
         dialog.show();
     }
 
-    private void sendMessage(ArrayList<String> sharedUsers) {
+    private void sendMessage(ArrayList<String> sharedUsers, String listID) {
 
         String message = dialog_EDT_message.getEditText().getText().toString();
-        dataManager.sendMessage(message, sharedUsers);
+        dataManager.sendMessage(message, sharedUsers, listID);
     }
 
     public void findViews(Dialog dialog) {

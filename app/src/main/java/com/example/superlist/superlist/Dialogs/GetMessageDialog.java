@@ -8,6 +8,7 @@ import android.widget.TextView;
 
 import com.example.superlist.R;
 import com.example.superlist.superlist.Firebase.DataManager;
+import com.google.firebase.auth.FirebaseAuth;
 
 
 public class GetMessageDialog {
@@ -20,7 +21,7 @@ public class GetMessageDialog {
     private final DataManager dataManager = DataManager.getInstance();
 
 
-    public void show(Activity activity, String userUID, String message) {
+    public void show(Activity activity, String userUID, String message, String listID) {
         final Dialog dialog = new Dialog(activity);
         dialog.setContentView(R.layout.dialog_get_message);
 
@@ -30,8 +31,9 @@ public class GetMessageDialog {
         dialog_BTN_ok.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                dataManager.deleteMessageFromDB(userUID);
                 dialog.dismiss();
+                dataManager.deleteMessageFromDB(userUID, listID);
+
             }
         });
 

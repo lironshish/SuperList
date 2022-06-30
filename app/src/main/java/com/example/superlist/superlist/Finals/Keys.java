@@ -36,6 +36,7 @@ public class Keys {
 
 
     public static final String KEY_NO_MESSAGE = "No Message";
+    public static final String KEY_MESSAGES = "messages";
 
 
 

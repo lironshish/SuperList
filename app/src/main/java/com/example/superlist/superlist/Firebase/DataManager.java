@@ -121,7 +121,7 @@ public class DataManager {
         });
     }
 
-    public void sendMessage(String message, ArrayList<String> sharedUsers) {
+    public void sendMessage(String message, ArrayList<String> sharedUsers, String listID) {
         DatabaseReference myRef = getRealTimeDB().getReference(Keys.KEY_USERS);
         myRef.addValueEventListener(new ValueEventListener() {
 
@@ -130,7 +130,7 @@ public class DataManager {
                 for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
                     for (int i = 0; i < sharedUsers.size(); i++) {
                         if (dataSnapshot.getKey().equals(sharedUsers.get(i))) {
-                            myRef.child(dataSnapshot.getKey()).child("message").setValue(message);
+                            myRef.child(dataSnapshot.getKey()).child(Keys.KEY_USER_MESSAGE).child(listID).setValue(message);
                         }
                     }
 
@@ -148,9 +148,9 @@ public class DataManager {
     }
 
 
-    public void deleteMessageFromDB(String userUID) {
-        DatabaseReference myRef = getRealTimeDB().getReference(Keys.KEY_USERS).child(userUID);
-        myRef.child(Keys.KEY_USER_MESSAGE).setValue(Keys.KEY_NO_MESSAGE);
+    public void deleteMessageFromDB(String userUID, String listID) {
+        DatabaseReference myRef = getRealTimeDB().getReference(Keys.KEY_USERS).child(userUID).child(Keys.KEY_USER_MESSAGE);
+        myRef.child(listID).setValue(Keys.KEY_NO_MESSAGE);
 //        myRef.addValueEventListener(new ValueEventListener() {
 //
 //            @Override

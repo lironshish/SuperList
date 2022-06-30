@@ -13,6 +13,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
@@ -214,13 +215,15 @@ public class MyListActivity extends AppCompatActivity {
     }
 
     private void checkIfThereIsAMessage() {
-        DatabaseReference myRef = realtimeDB.getReference(Keys.KEY_USERS).child(FirebaseAuth.getInstance().getCurrentUser().getUid());
+        DatabaseReference myRef = realtimeDB.getReference(Keys.KEY_USERS).child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child(Keys.KEY_USER_MESSAGE);
         myRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                if (!snapshot.child(Keys.KEY_USER_MESSAGE).getValue(String.class).equals(Keys.KEY_NO_MESSAGE)) {
+                if (!snapshot.child(currentListSerialNumber).getValue(String.class).equals(Keys.KEY_NO_MESSAGE)) {
+                    Log.d("pttt","4 "+ snapshot.child(currentListSerialNumber).getValue(String.class));
                     GetMessageDialog getMessageDialog = new GetMessageDialog();
-                    getMessageDialog.show(MyListActivity.this, FirebaseAuth.getInstance().getCurrentUser().getUid(), snapshot.child(Keys.KEY_USER_MESSAGE).getValue(String.class));
+                    getMessageDialog.show(MyListActivity.this, FirebaseAuth.getInstance().getCurrentUser().getUid(), snapshot.child(currentListSerialNumber).getValue(String.class), currentListSerialNumber);
+
                 }
             }
 
@@ -280,7 +283,7 @@ public class MyListActivity extends AppCompatActivity {
                             warningDialog.show(MyListActivity.this, "There are no shared users with this list");
                         } else {
                             SendMessageDialog sendMessageDialog = new SendMessageDialog();
-                            sendMessageDialog.show(MyListActivity.this, sharedUsers);
+                            sendMessageDialog.show(MyListActivity.this, sharedUsers, currentListSerialNumber);
                         }
                     }
 

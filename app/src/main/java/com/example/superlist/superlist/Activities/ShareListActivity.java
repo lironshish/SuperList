@@ -18,6 +18,7 @@ import com.example.superlist.superlist.Firebase.DataManager;
 import com.example.superlist.superlist.Objects.List;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.textfield.TextInputLayout;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -156,6 +157,10 @@ public class ShareListActivity extends AppCompatActivity {
 
 
     private void shareList(String userSharedUID, List list) {
+        DatabaseReference tempRef = realtimeDB.getReference(Keys.KEY_USERS).child(userSharedUID).child(Keys.KEY_USER_MESSAGE);
+        tempRef.child(currentListSerialNumber).setValue(Keys.KEY_NO_MESSAGE);
+
+
         DatabaseReference listRef = realtimeDB.getReference(Keys.KEY_USERS).child(userSharedUID).child(Keys.KEY_LISTS);
         listRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override

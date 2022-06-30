@@ -111,6 +111,10 @@ public class CreateListActivity extends AppCompatActivity {
                     listRef.child("itemsCounter").setValue(0);
 
                     //add list serial number to current user
+
+                    DatabaseReference tempRef = realtimeDB.getReference(Keys.KEY_USERS).child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child(Keys.KEY_USER_MESSAGE);
+                    tempRef.child(tempList.getSerialNumber()).setValue(Keys.KEY_NO_MESSAGE);
+
                     DatabaseReference userRef = realtimeDB.getReference(Keys.KEY_USERS).child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child(Keys.KEY_LISTS);
                     userRef.addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override

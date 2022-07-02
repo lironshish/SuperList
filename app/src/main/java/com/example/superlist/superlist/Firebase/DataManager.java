@@ -123,7 +123,7 @@ public class DataManager {
 
     public void sendMessage(String message, ArrayList<String> sharedUsers, String listID) {
         DatabaseReference myRef = getRealTimeDB().getReference(Keys.KEY_USERS);
-        myRef.addValueEventListener(new ValueEventListener() {
+        myRef.addListenerForSingleValueEvent(new ValueEventListener() {
 
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -151,18 +151,7 @@ public class DataManager {
     public void deleteMessageFromDB(String userUID, String listID) {
         DatabaseReference myRef = getRealTimeDB().getReference(Keys.KEY_USERS).child(userUID).child(Keys.KEY_USER_MESSAGE);
         myRef.child(listID).setValue(Keys.KEY_NO_MESSAGE);
-//        myRef.addValueEventListener(new ValueEventListener() {
-//
-//            @Override
-//            public void onDataChange(@NonNull DataSnapshot snapshot) {
-//                snapshot.child("message").
-//            }
-//
-//            @Override
-//            public void onCancelled(@NonNull DatabaseError error) {
-//
-//            }
-//        });
+
     }
 
 }

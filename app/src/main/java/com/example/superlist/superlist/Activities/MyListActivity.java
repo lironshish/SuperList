@@ -92,8 +92,8 @@ public class MyListActivity extends AppCompatActivity {
         }
 
         findViews();
-        checkIfThereIsAMessage();
         initButtons();
+        checkIfThereIsAMessage();
         add_person.setVisible(true);
         updateUI();
     }
@@ -124,7 +124,7 @@ public class MyListActivity extends AppCompatActivity {
 
         DatabaseReference userRef = realtimeDB.getReference(Keys.KEY_LISTS).child(currentListSerialNumber).child(Keys.KEY_ITEMS);
 
-        userRef.addValueEventListener(new ValueEventListener() {
+        userRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 myItems = new ArrayList<>();
@@ -216,7 +216,7 @@ public class MyListActivity extends AppCompatActivity {
 
     private void checkIfThereIsAMessage() {
         DatabaseReference myRef = realtimeDB.getReference(Keys.KEY_USERS).child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child(Keys.KEY_USER_MESSAGE);
-        myRef.addValueEventListener(new ValueEventListener() {
+        myRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 if (!snapshot.child(currentListSerialNumber).getValue(String.class).equals(Keys.KEY_NO_MESSAGE)) {
@@ -269,7 +269,7 @@ public class MyListActivity extends AppCompatActivity {
             public boolean onMenuItemClick(MenuItem menuItem) {
 
                 DatabaseReference myRef = realtimeDB.getReference(Keys.KEY_LISTS).child(currentListSerialNumber).child(Keys.KEY_SHARED_USERS);
-                myRef.addValueEventListener(new ValueEventListener() {
+                myRef.addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
                         for (DataSnapshot dataSnapshot : snapshot.getChildren()) {

@@ -6,12 +6,12 @@
 ### Built Using: Java, Google Firebase (Realtime Firebase & Firebase Auth Using Phone Number)
 
 ## ✨ Features
-* # Login and Sign-up with any valid phone number
-* # Chose your profile picture
-* # Create as many grocery lists you need
-* # Sharing the list with other users by phone number
-* # Easily manage your lists, with our friendly UI.
-* # Long click to remove items from a list or lists
+* ### Login and Sign-up with any valid phone number
+* ### Chose your profile picture
+* ### Create as many grocery lists you need
+* ### Sharing the list with other users by phone number
+* ### Easily manage your lists, with our friendly UI.
+* ### Long click to remove items from a list or lists
 
 
 <div>

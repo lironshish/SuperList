@@ -11,7 +11,7 @@
 * ### Create as many grocery lists you need
 * ### Sharing the list with other users by phone number
 * ### Easily manage your lists, with our friendly UI.
-* ### Long click to remove items from a list or lists
+* ### Long click to remove lists or items from a list
 
 
 <div>
